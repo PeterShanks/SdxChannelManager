@@ -1,100 +1,100 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace SdxChannelManager.Models
 {
     public class SatelliteUiSetStruct
     {
-        [JsonProperty("uiBit")]
+        [JsonPropertyName("uiBit")]
         public SatelliteUiBitStruct? UiBit { get; set; }
 
-        [JsonProperty("uiStatus")]
+        [JsonPropertyName("uiStatus")]
         public int UiStatus { get; set; }
     }
 
     public class SatelliteUiBitStruct
     {
-        [JsonProperty("22Hz")]
+        [JsonPropertyName("22Hz")]
         public int Hz22 { get; set; }
 
-        [JsonProperty("V12")]
+        [JsonPropertyName("V12")]
         public int V12 { get; set; }
 
-        [JsonProperty("DiSEqC")]
+        [JsonPropertyName("DiSEqC")]
         public int DiSEqC { get; set; }
 
-        [JsonProperty("DiSEqC11")]
+        [JsonPropertyName("DiSEqC11")]
         public int DiSEqC11 { get; set; }
 
-        [JsonProperty("IsUnicable")]
+        [JsonPropertyName("IsUnicable")]
         public int IsUnicable { get; set; }
 
-        [JsonProperty("UnicableType")]
+        [JsonPropertyName("UnicableType")]
         public int UnicableType { get; set; }
 
-        [JsonProperty("FTAOnly")]
+        [JsonPropertyName("FTAOnly")]
         public int FTAOnly { get; set; }
 
-        [JsonProperty("Motor")]
+        [JsonPropertyName("Motor")]
         public int Motor { get; set; }
 
-        [JsonProperty("SatDir")]
+        [JsonPropertyName("SatDir")]
         public int SatDir { get; set; }
 
-        [JsonProperty("LNBPower")]
+        [JsonPropertyName("LNBPower")]
         public int LNBPower { get; set; }
 
-        [JsonProperty("SelectedTP")]
+        [JsonPropertyName("SelectedTP")]
         public int SelectedTP { get; set; }
 
-        [JsonProperty("NetWorkSearch")]
+        [JsonPropertyName("NetWorkSearch")]
         public int NetWorkSearch { get; set; }
 
-        [JsonProperty("Hide")]
+        [JsonPropertyName("Hide")]
         public int Hide { get; set; }
     }
 
     public class SatelliteObject
     {
-        [JsonProperty("SatName")]
+        [JsonPropertyName("SatName")]
         public string? SatName { get; set; }
 
-        [JsonProperty("LowLnbFreq")]
+        [JsonPropertyName("LowLnbFreq")]
         public int LowLnbFreq { get; set; }
 
-        [JsonProperty("HighLnbFreq")]
+        [JsonPropertyName("HighLnbFreq")]
         public int HighLnbFreq { get; set; }
 
-        [JsonProperty("SatAngle")]
+        [JsonPropertyName("SatAngle")]
         public int SatAngle { get; set; }
 
-        [JsonProperty("iSatMotoPosition")]
+        [JsonPropertyName("iSatMotoPosition")]
         public int ISatMotoPosition { get; set; }
 
-        [JsonProperty("TunerMask")]
+        [JsonPropertyName("TunerMask")]
         public int TunerMask { get; set; }
 
-        [JsonProperty("UnicableFreq")]
+        [JsonPropertyName("UnicableFreq")]
         public int UnicableFreq { get; set; }
 
-        [JsonProperty("DLNBMask")]
+        [JsonPropertyName("DLNBMask")]
         public int DLNBMask { get; set; }
 
-        [JsonProperty("DLNBUserBand")]
+        [JsonPropertyName("DLNBUserBand")]
         public int DLNBUserBand { get; set; }
 
-        [JsonProperty("DLNBType")]
+        [JsonPropertyName("DLNBType")]
         public int DLNBType { get; set; }
 
-        [JsonProperty("UnicableCH")]
+        [JsonPropertyName("UnicableCH")]
         public int UnicableCH { get; set; }
 
-        [JsonProperty("uiSet")]
+        [JsonPropertyName("uiSet")]
         public SatelliteUiSetStruct? UiSet { get; set; }
 
-        [JsonProperty("sSaveCurSatPlayTVIndex")]
+        [JsonPropertyName("sSaveCurSatPlayTVIndex")]
         public int SSaveCurSatPlayTVIndex { get; set; }
 
-        [JsonProperty("sSaveCurSatPlayRadioIndex")]
+        [JsonPropertyName("sSaveCurSatPlayRadioIndex")]
         public int SSaveCurSatPlayRadioIndex { get; set; }
     }
 }

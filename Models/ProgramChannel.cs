@@ -1,163 +1,163 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace SdxChannelManager.Models
 {
     public class AudioPidInfo
     {
-        [JsonProperty("PID")]
+        [JsonPropertyName("PID")]
         public int PID { get; set; }
 
-        [JsonProperty("Mode")]
+        [JsonPropertyName("Mode")]
         public int Mode { get; set; }
 
-        [JsonProperty("Lang")]
+        [JsonPropertyName("Lang")]
         public int Lang { get; set; }
 
-        [JsonProperty("Codec")]
+        [JsonPropertyName("Codec")]
         public int Codec { get; set; }
     }
 
     public class SubtitlePidInfo
     {
-        [JsonProperty("PID")]
+        [JsonPropertyName("PID")]
         public int PID { get; set; }
 
-        [JsonProperty("Mode")]
+        [JsonPropertyName("Mode")]
         public int Mode { get; set; }
 
-        [JsonProperty("Lang")]
+        [JsonPropertyName("Lang")]
         public int Lang { get; set; }
 
-        [JsonProperty("Type")]
+        [JsonPropertyName("Type")]
         public int Type { get; set; }
 
-        [JsonProperty("CompPage")]
+        [JsonPropertyName("CompPage")]
         public int CompPage { get; set; }
 
-        [JsonProperty("AncPage")]
+        [JsonPropertyName("AncPage")]
         public int AncPage { get; set; }
     }
 
     public class ServiceIdStruct
     {
-        [JsonProperty("ServiceID")]
+        [JsonPropertyName("ServiceID")]
         public string? ServiceID { get; set; }
 
-        [JsonProperty("unShort")]
+        [JsonPropertyName("unShort")]
         public UnShortStruct? UnShort { get; set; }
     }
 
     public class UnShortStruct
     {
-        [JsonProperty("sLo16")]
+        [JsonPropertyName("sLo16")]
         public int SLo16 { get; set; }
 
-        [JsonProperty("sHi16")]
+        [JsonPropertyName("sHi16")]
         public int SHi16 { get; set; }
     }
 
     public class UiSetStruct
     {
-        [JsonProperty("uiBit")]
+        [JsonPropertyName("uiBit")]
         public UiBitStruct? UiBit { get; set; }
 
-        [JsonProperty("uiStatus")]
+        [JsonPropertyName("uiStatus")]
         public int UiStatus { get; set; }
     }
 
     public class UiBitStruct
     {
-        [JsonProperty("Lock")]
+        [JsonPropertyName("Lock")]
         public int Lock { get; set; }
 
-        [JsonProperty("TV")]
+        [JsonPropertyName("TV")]
         public int TV { get; set; }
 
-        [JsonProperty("Skip")]
+        [JsonPropertyName("Skip")]
         public int Skip { get; set; }
 
-        [JsonProperty("CA")]
+        [JsonPropertyName("CA")]
         public int CA { get; set; }
 
-        [JsonProperty("VideoCodec")]
+        [JsonPropertyName("VideoCodec")]
         public int VideoCodec { get; set; }
 
-        [JsonProperty("HD")]
+        [JsonPropertyName("HD")]
         public int HD { get; set; }
 
-        [JsonProperty("Hide")]
+        [JsonPropertyName("Hide")]
         public int Hide { get; set; }
 
-        [JsonProperty("NetNameSelected")]
+        [JsonPropertyName("NetNameSelected")]
         public int NetNameSelected { get; set; }
     }
 
     public class ProgramChannelData
     {
-        [JsonProperty("uiStartCode")]
+        [JsonPropertyName("uiStartCode")]
         public int UiStartCode { get; set; }
 
-        [JsonProperty("ucNameLen")]
+        [JsonPropertyName("ucNameLen")]
         public int UcNameLen { get; set; }
 
-        [JsonProperty("ucAudioPID")]
+        [JsonPropertyName("ucAudioPID")]
         public int UcAudioPID { get; set; }
 
-        [JsonProperty("ucSubPID")]
+        [JsonPropertyName("ucSubPID")]
         public int UcSubPID { get; set; }
 
-        [JsonProperty("VideoPID")]
+        [JsonPropertyName("VideoPID")]
         public int VideoPID { get; set; }
 
-        [JsonProperty("PCRPID")]
+        [JsonPropertyName("PCRPID")]
         public int PCRPID { get; set; }
 
-        [JsonProperty("PMTPID")]
+        [JsonPropertyName("PMTPID")]
         public int PMTPID { get; set; }
 
-        [JsonProperty("TTXPID")]
+        [JsonPropertyName("TTXPID")]
         public int TTXPID { get; set; }
 
-        [JsonProperty("stProgNo")]
+        [JsonPropertyName("stProgNo")]
         public ServiceIdStruct? StProgNo { get; set; }
 
-        [JsonProperty("uiSet")]
+        [JsonPropertyName("uiSet")]
         public UiSetStruct? UiSet { get; set; }
 
-        [JsonProperty("TSID")]
+        [JsonPropertyName("TSID")]
         public int TSID { get; set; }
 
-        [JsonProperty("ONID")]
+        [JsonPropertyName("ONID")]
         public int ONID { get; set; }
 
-        [JsonProperty("SDTServiceType")]
+        [JsonPropertyName("SDTServiceType")]
         public int SDTServiceType { get; set; }
 
-        [JsonProperty("t2mi_pg")]
+        [JsonPropertyName("t2mi_pg")]
         public int T2mi_pg { get; set; }
 
-        [JsonProperty("t2mi_plp_id")]
+        [JsonPropertyName("t2mi_plp_id")]
         public int T2mi_plp_id { get; set; }
 
-        [JsonProperty("t2mi_payload_pid")]
+        [JsonPropertyName("t2mi_payload_pid")]
         public int T2mi_payload_pid { get; set; }
 
-        [JsonProperty("FavBit")]
+        [JsonPropertyName("FavBit")]
         public int FavBit { get; set; }
 
-        [JsonProperty("ServiceName")]
+        [JsonPropertyName("ServiceName")]
         public string? ServiceName { get; set; }
 
-        [JsonProperty("AudioSelected")]
+        [JsonPropertyName("AudioSelected")]
         public int AudioSelected { get; set; }
 
-        [JsonProperty("AudioArray")]
+        [JsonPropertyName("AudioArray")]
         public List<AudioPidInfo> AudioArray { get; set; }
 
-        [JsonProperty("SubtSelected")]
+        [JsonPropertyName("SubtSelected")]
         public int SubtSelected { get; set; }
 
-        [JsonProperty("SubtArray")]
+        [JsonPropertyName("SubtArray")]
         public List<SubtitlePidInfo> SubtArray { get; set; }
 
         public ProgramChannelData()

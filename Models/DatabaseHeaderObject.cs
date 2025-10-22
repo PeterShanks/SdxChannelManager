@@ -1,58 +1,58 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace SdxChannelManager.Models
 {
     public class DatabaseHeaderObject
     {
-        [JsonProperty("szMark")]
+        [JsonPropertyName("szMark")]
         public string? SzMark { get; set; }
 
-        [JsonProperty("szDatabaseName")]
+        [JsonPropertyName("szDatabaseName")]
         public string? SzDatabaseName { get; set; }
 
-        [JsonProperty("uiOriginalSize")]
+        [JsonPropertyName("uiOriginalSize")]
         public int UiOriginalSize { get; set; }
 
-        [JsonProperty("sSatellite")]
+        [JsonPropertyName("sSatellite")]
         public int SSatellite { get; set; }
 
-        [JsonProperty("sTransponder")]
+        [JsonPropertyName("sTransponder")]
         public int STransponder { get; set; }
 
-        [JsonProperty("sTVNumber")]
+        [JsonPropertyName("sTVNumber")]
         public int STVNumber { get; set; }
 
-        [JsonProperty("sRadioNumber")]
+        [JsonPropertyName("sRadioNumber")]
         public int SRadioNumber { get; set; }
 
-        [JsonProperty("sSatRecLen")]
+        [JsonPropertyName("sSatRecLen")]
         public int SSatRecLen { get; set; }
 
-        [JsonProperty("sTPRecLen")]
+        [JsonPropertyName("sTPRecLen")]
         public int STPRecLen { get; set; }
 
-        [JsonProperty("sProgRecLen")]
+        [JsonPropertyName("sProgRecLen")]
         public int SProgRecLen { get; set; }
 
-        [JsonProperty("sBoxRecLen")]
+        [JsonPropertyName("sBoxRecLen")]
         public int SBoxRecLen { get; set; }
 
-        [JsonProperty("sWatchRecLen")]
+        [JsonPropertyName("sWatchRecLen")]
         public int SWatchRecLen { get; set; }
 
-        [JsonProperty("sMaxFavor")]
+        [JsonPropertyName("sMaxFavor")]
         public int SMaxFavor { get; set; }
 
-        [JsonProperty("sFavorListLen")]
+        [JsonPropertyName("sFavorListLen")]
         public int SFavorListLen { get; set; }
 
-        [JsonProperty("sDataBaseVer")]
+        [JsonPropertyName("sDataBaseVer")]
         public int SDataBaseVer { get; set; }
 
-        [JsonProperty("uiFileLength")]
+        [JsonPropertyName("uiFileLength")]
         public int UiFileLength { get; set; }
 
-        [JsonProperty("uiCRC32")]
+        [JsonPropertyName("uiCRC32")]
         public int UiCRC32 { get; set; }
     }
 }

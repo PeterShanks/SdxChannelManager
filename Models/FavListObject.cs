@@ -1,28 +1,28 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace SdxChannelManager.Models
 {
     public class FavListObject
     {
-        [JsonProperty("uiMark")]
+        [JsonPropertyName("uiMark")]
         public long UiMark { get; set; }
 
-        [JsonProperty("stProgNo")]
+        [JsonPropertyName("stProgNo")]
         public List<ServiceIdStruct> StProgNo { get; set; }
 
-        [JsonProperty("sNoOfTVFavor")]
+        [JsonPropertyName("sNoOfTVFavor")]
         public int SNoOfTVFavor { get; set; }
 
-        [JsonProperty("sNoOfRadioFavor")]
+        [JsonPropertyName("sNoOfRadioFavor")]
         public int SNoOfRadioFavor { get; set; }
 
-        [JsonProperty("sTailOfFavor")]
+        [JsonPropertyName("sTailOfFavor")]
         public int STailOfFavor { get; set; }
 
-        [JsonProperty("bUpdateFavor")]
+        [JsonPropertyName("bUpdateFavor")]
         public int BUpdateFavor { get; set; }
 
-        [JsonProperty("cHide")]
+        [JsonPropertyName("cHide")]
         public int CHide { get; set; }
 
         public FavListObject()

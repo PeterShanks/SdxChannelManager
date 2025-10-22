@@ -1,4 +1,4 @@
-using Newtonsoft.Json.Linq;
+using System.Text.Json;
 
 namespace SdxChannelManager.Models
 {
@@ -8,7 +8,7 @@ namespace SdxChannelManager.Models
         public int Index { get; set; } // The numeric part of the key
         public bool IsRadio { get; set; }
         public string ServiceName { get; set; }
-        public JObject RawData { get; set; } // Store the complete JSON object
+        public JsonElement RawData { get; set; } // Store the complete JSON object
         
         // Typed channel data - use this for proper access to all properties
         public ProgramChannelData ChannelData { get; set; }
@@ -22,7 +22,7 @@ namespace SdxChannelManager.Models
         {
             ServiceName = string.Empty;
             ObjectKey = string.Empty;
-            RawData = new JObject();
+            RawData = JsonDocument.Parse("{}").RootElement.Clone();
             ChannelData = new ProgramChannelData();
         }
         

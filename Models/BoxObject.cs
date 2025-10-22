@@ -1,598 +1,598 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace SdxChannelManager.Models
 {
     public class ManualTime
     {
-        [JsonProperty("bManualTime")]
+        [JsonPropertyName("bManualTime")]
         public int BManualTime { get; set; }
 
-        [JsonProperty("ucHour")]
+        [JsonPropertyName("ucHour")]
         public int UcHour { get; set; }
 
-        [JsonProperty("ucMinu")]
+        [JsonPropertyName("ucMinu")]
         public int UcMinu { get; set; }
 
-        [JsonProperty("ucDate")]
+        [JsonPropertyName("ucDate")]
         public int UcDate { get; set; }
 
-        [JsonProperty("ucMonth")]
+        [JsonPropertyName("ucMonth")]
         public int UcMonth { get; set; }
 
-        [JsonProperty("iYear")]
+        [JsonPropertyName("iYear")]
         public int IYear { get; set; }
     }
 
     public class USBSetting
     {
-        [JsonProperty("uiLoopMode")]
+        [JsonPropertyName("uiLoopMode")]
         public int UiLoopMode { get; set; }
 
-        [JsonProperty("uiSlideShowInterval")]
+        [JsonPropertyName("uiSlideShowInterval")]
         public int UiSlideShowInterval { get; set; }
 
-        [JsonProperty("uiTimeShiftBufSize")]
+        [JsonPropertyName("uiTimeShiftBufSize")]
         public int UiTimeShiftBufSize { get; set; }
 
-        [JsonProperty("uiRecTimeMinHi")]
+        [JsonPropertyName("uiRecTimeMinHi")]
         public int UiRecTimeMinHi { get; set; }
 
-        [JsonProperty("uiPhotoViewMode")]
+        [JsonPropertyName("uiPhotoViewMode")]
         public int UiPhotoViewMode { get; set; }
 
-        [JsonProperty("uiRecTimeMinLow")]
+        [JsonPropertyName("uiRecTimeMinLow")]
         public int UiRecTimeMinLow { get; set; }
 
-        [JsonProperty("uiRecDriveNo")]
+        [JsonPropertyName("uiRecDriveNo")]
         public int UiRecDriveNo { get; set; }
 
-        [JsonProperty("uiTimeShiftDriveNo")]
+        [JsonPropertyName("uiTimeShiftDriveNo")]
         public int UiTimeShiftDriveNo { get; set; }
 
-        [JsonProperty("uiAlwaysTimeShift")]
+        [JsonPropertyName("uiAlwaysTimeShift")]
         public int UiAlwaysTimeShift { get; set; }
 
-        [JsonProperty("uiRecWholeTP")]
+        [JsonPropertyName("uiRecWholeTP")]
         public int UiRecWholeTP { get; set; }
 
-        [JsonProperty("uiSubtitleFontColor")]
+        [JsonPropertyName("uiSubtitleFontColor")]
         public int UiSubtitleFontColor { get; set; }
 
-        [JsonProperty("uiSubtitleBackColor")]
+        [JsonPropertyName("uiSubtitleBackColor")]
         public int UiSubtitleBackColor { get; set; }
 
-        [JsonProperty("uiSubtitleEncodeType")]
+        [JsonPropertyName("uiSubtitleEncodeType")]
         public int UiSubtitleEncodeType { get; set; }
 
-        [JsonProperty("uiAutoUploadToFTP")]
+        [JsonPropertyName("uiAutoUploadToFTP")]
         public int UiAutoUploadToFTP { get; set; }
 
-        [JsonProperty("uiUSBFileSortType")]
+        [JsonPropertyName("uiUSBFileSortType")]
         public int UiUSBFileSortType { get; set; }
 
-        [JsonProperty("uiPVRStartLastPos")]
+        [JsonPropertyName("uiPVRStartLastPos")]
         public int UiPVRStartLastPos { get; set; }
 
-        [JsonProperty("uiRecType")]
+        [JsonPropertyName("uiRecType")]
         public int UiRecType { get; set; }
 
-        [JsonProperty("uiNeedSaveTMS")]
+        [JsonPropertyName("uiNeedSaveTMS")]
         public int UiNeedSaveTMS { get; set; }
 
-        [JsonProperty("uiSetTmsToRecord")]
+        [JsonPropertyName("uiSetTmsToRecord")]
         public int UiSetTmsToRecord { get; set; }
     }
 
     public class IPConfig
     {
-        [JsonProperty("bDisable")]
+        [JsonPropertyName("bDisable")]
         public int BDisable { get; set; }
 
-        [JsonProperty("bStaticIP")]
+        [JsonPropertyName("bStaticIP")]
         public int BStaticIP { get; set; }
 
-        [JsonProperty("IpAddress")]
+        [JsonPropertyName("IpAddress")]
         public string? IpAddress { get; set; }
 
-        [JsonProperty("NetMask")]
+        [JsonPropertyName("NetMask")]
         public string? NetMask { get; set; }
 
-        [JsonProperty("GateWay")]
+        [JsonPropertyName("GateWay")]
         public string? GateWay { get; set; }
 
-        [JsonProperty("NetDNS1")]
+        [JsonPropertyName("NetDNS1")]
         public string? NetDNS1 { get; set; }
 
-        [JsonProperty("NetDNS2")]
+        [JsonPropertyName("NetDNS2")]
         public string? NetDNS2 { get; set; }
     }
 
     public class CECConfig
     {
-        [JsonProperty("cec_func_enable")]
+        [JsonPropertyName("cec_func_enable")]
         public int CecFuncEnable { get; set; }
 
-        [JsonProperty("cec_feature_rcp_enable")]
+        [JsonPropertyName("cec_feature_rcp_enable")]
         public int CecFeatureRcpEnable { get; set; }
 
-        [JsonProperty("system_audio_mode_status")]
+        [JsonPropertyName("system_audio_mode_status")]
         public int SystemAudioModeStatus { get; set; }
 
-        [JsonProperty("cec_device_standby_mode")]
+        [JsonPropertyName("cec_device_standby_mode")]
         public int CecDeviceStandbyMode { get; set; }
     }
 
     public class BoxObject
     {
-        [JsonProperty("uiTrans")]
+        [JsonPropertyName("uiTrans")]
         public int UiTrans { get; set; }
 
-        [JsonProperty("uiTXTTrans")]
+        [JsonPropertyName("uiTXTTrans")]
         public int UiTXTTrans { get; set; }
 
-        [JsonProperty("uiVolLevel")]
+        [JsonPropertyName("uiVolLevel")]
         public int UiVolLevel { get; set; }
 
-        [JsonProperty("uiSatSelect")]
+        [JsonPropertyName("uiSatSelect")]
         public int UiSatSelect { get; set; }
 
-        [JsonProperty("bMuteState")]
+        [JsonPropertyName("bMuteState")]
         public int BMuteState { get; set; }
 
-        [JsonProperty("bTVState")]
+        [JsonPropertyName("bTVState")]
         public int BTVState { get; set; }
 
-        [JsonProperty("bScanMode")]
+        [JsonPropertyName("bScanMode")]
         public int BScanMode { get; set; }
 
-        [JsonProperty("bHelpMode")]
+        [JsonPropertyName("bHelpMode")]
         public int BHelpMode { get; set; }
 
-        [JsonProperty("bNetworkSearch")]
+        [JsonPropertyName("bNetworkSearch")]
         public int BNetworkSearch { get; set; }
 
-        [JsonProperty("uiAdjustTimeType")]
+        [JsonPropertyName("uiAdjustTimeType")]
         public int UiAdjustTimeType { get; set; }
 
-        [JsonProperty("uiSearchSpeed")]
+        [JsonPropertyName("uiSearchSpeed")]
         public int UiSearchSpeed { get; set; }
 
-        [JsonProperty("uiTunerSelect")]
+        [JsonPropertyName("uiTunerSelect")]
         public int UiTunerSelect { get; set; }
 
-        [JsonProperty("uiFTASelect")]
+        [JsonPropertyName("uiFTASelect")]
         public int UiFTASelect { get; set; }
 
-        [JsonProperty("bInstallLock")]
+        [JsonPropertyName("bInstallLock")]
         public int BInstallLock { get; set; }
 
-        [JsonProperty("bEditLock")]
+        [JsonPropertyName("bEditLock")]
         public int BEditLock { get; set; }
 
-        [JsonProperty("bSystemLock")]
+        [JsonPropertyName("bSystemLock")]
         public int BSystemLock { get; set; }
 
-        [JsonProperty("bScart")]
+        [JsonPropertyName("bScart")]
         public int BScart { get; set; }
 
-        [JsonProperty("bPatchEnable")]
+        [JsonPropertyName("bPatchEnable")]
         public int BPatchEnable { get; set; }
 
-        [JsonProperty("uiTimeMode")]
+        [JsonPropertyName("uiTimeMode")]
         public int UiTimeMode { get; set; }
 
-        [JsonProperty("uiFontType")]
+        [JsonPropertyName("uiFontType")]
         public int UiFontType { get; set; }
 
-        [JsonProperty("bUsbtoRs232")]
+        [JsonPropertyName("bUsbtoRs232")]
         public int BUsbtoRs232 { get; set; }
 
-        [JsonProperty("bUpdateFlag")]
+        [JsonPropertyName("bUpdateFlag")]
         public int BUpdateFlag { get; set; }
 
-        [JsonProperty("bDispRecIcon")]
+        [JsonPropertyName("bDispRecIcon")]
         public int BDispRecIcon { get; set; }
 
-        [JsonProperty("uiUsal")]
+        [JsonPropertyName("uiUsal")]
         public int UiUsal { get; set; }
 
-        [JsonProperty("uiSupplyLnb")]
+        [JsonPropertyName("uiSupplyLnb")]
         public int UiSupplyLnb { get; set; }
 
-        [JsonProperty("bStandbyClock")]
+        [JsonPropertyName("bStandbyClock")]
         public int BStandbyClock { get; set; }
 
-        [JsonProperty("bSignalAudio")]
+        [JsonPropertyName("bSignalAudio")]
         public int BSignalAudio { get; set; }
 
-        [JsonProperty("bNeedToDoUserGuide")]
+        [JsonPropertyName("bNeedToDoUserGuide")]
         public int BNeedToDoUserGuide { get; set; }
 
-        [JsonProperty("update_channel_name_auto")]
+        [JsonPropertyName("update_channel_name_auto")]
         public int UpdateChannelNameAuto { get; set; }
 
-        [JsonProperty("temp_official_sw")]
+        [JsonPropertyName("temp_official_sw")]
         public int TempOfficialSw { get; set; }
 
-        [JsonProperty("load_m3u_file_mode")]
+        [JsonPropertyName("load_m3u_file_mode")]
         public int LoadM3uFileMode { get; set; }
 
-        [JsonProperty("uiAPDtime")]
+        [JsonPropertyName("uiAPDtime")]
         public int UiAPDtime { get; set; }
 
-        [JsonProperty("need_standby_after_ota_update")]
+        [JsonPropertyName("need_standby_after_ota_update")]
         public int NeedStandbyAfterOtaUpdate { get; set; }
 
-        [JsonProperty("channel_color_switch_mode")]
+        [JsonPropertyName("channel_color_switch_mode")]
         public int ChannelColorSwitchMode { get; set; }
 
-        [JsonProperty("uiTuneOut")]
+        [JsonPropertyName("uiTuneOut")]
         public int UiTuneOut { get; set; }
 
-        [JsonProperty("uiAudioOutputMode")]
+        [JsonPropertyName("uiAudioOutputMode")]
         public int UiAudioOutputMode { get; set; }
 
-        [JsonProperty("uiSelectFTP")]
+        [JsonPropertyName("uiSelectFTP")]
         public int UiSelectFTP { get; set; }
 
-        [JsonProperty("bAutoChSwitchMode")]
+        [JsonPropertyName("bAutoChSwitchMode")]
         public int BAutoChSwitchMode { get; set; }
 
-        [JsonProperty("bAutoChExitMode")]
+        [JsonPropertyName("bAutoChExitMode")]
         public int BAutoChExitMode { get; set; }
 
-        [JsonProperty("bMultiPicLoopMode")]
+        [JsonPropertyName("bMultiPicLoopMode")]
         public int BMultiPicLoopMode { get; set; }
 
-        [JsonProperty("bShowRecallList")]
+        [JsonPropertyName("bShowRecallList")]
         public int BShowRecallList { get; set; }
 
-        [JsonProperty("bBlankMode")]
+        [JsonPropertyName("bBlankMode")]
         public int BBlankMode { get; set; }
 
-        [JsonProperty("bQuickSwitchChannel")]
+        [JsonPropertyName("bQuickSwitchChannel")]
         public int BQuickSwitchChannel { get; set; }
 
-        [JsonProperty("bTimerOnMode")]
+        [JsonPropertyName("bTimerOnMode")]
         public int BTimerOnMode { get; set; }
 
-        [JsonProperty("bStandbyMode")]
+        [JsonPropertyName("bStandbyMode")]
         public int BStandbyMode { get; set; }
 
-        [JsonProperty("uiAFD")]
+        [JsonPropertyName("uiAFD")]
         public int UiAFD { get; set; }
 
-        [JsonProperty("bProviderSelect")]
+        [JsonPropertyName("bProviderSelect")]
         public int BProviderSelect { get; set; }
 
-        [JsonProperty("uiProviderIndex")]
+        [JsonPropertyName("uiProviderIndex")]
         public int UiProviderIndex { get; set; }
 
-        [JsonProperty("bStartAutoTimeShiftDisp")]
+        [JsonPropertyName("bStartAutoTimeShiftDisp")]
         public int BStartAutoTimeShiftDisp { get; set; }
 
-        [JsonProperty("bScrambleChannelDisp")]
+        [JsonPropertyName("bScrambleChannelDisp")]
         public int BScrambleChannelDisp { get; set; }
 
-        [JsonProperty("uiOSDTimeout")]
+        [JsonPropertyName("uiOSDTimeout")]
         public int UiOSDTimeout { get; set; }
 
-        [JsonProperty("ucCurTTXLanuage")]
+        [JsonPropertyName("ucCurTTXLanuage")]
         public int UcCurTTXLanuage { get; set; }
 
-        [JsonProperty("bStandby")]
+        [JsonPropertyName("bStandby")]
         public int BStandby { get; set; }
 
-        [JsonProperty("bUSBWifiEnable")]
+        [JsonPropertyName("bUSBWifiEnable")]
         public int BUSBWifiEnable { get; set; }
 
-        [JsonProperty("bEnableScartOut")]
+        [JsonPropertyName("bEnableScartOut")]
         public int BEnableScartOut { get; set; }
 
-        [JsonProperty("bEMMBlocker")]
+        [JsonPropertyName("bEMMBlocker")]
         public int BEMMBlocker { get; set; }
 
-        [JsonProperty("bEMMUBlocker")]
+        [JsonPropertyName("bEMMUBlocker")]
         public int BEMMUBlocker { get; set; }
 
-        [JsonProperty("bEMMSBlocker")]
+        [JsonPropertyName("bEMMSBlocker")]
         public int BEMMSBlocker { get; set; }
 
-        [JsonProperty("bEMMGBlocker")]
+        [JsonPropertyName("bEMMGBlocker")]
         public int BEMMGBlocker { get; set; }
 
-        [JsonProperty("bDisplayHomeshareMenu")]
+        [JsonPropertyName("bDisplayHomeshareMenu")]
         public int BDisplayHomeshareMenu { get; set; }
 
-        [JsonProperty("bDisplayYoupornMenu")]
+        [JsonPropertyName("bDisplayYoupornMenu")]
         public int BDisplayYoupornMenu { get; set; }
 
-        [JsonProperty("ch_list_multi_columns")]
+        [JsonPropertyName("ch_list_multi_columns")]
         public int ChListMultiColumns { get; set; }
 
-        [JsonProperty("uiFPDisplayMode")]
+        [JsonPropertyName("uiFPDisplayMode")]
         public int UiFPDisplayMode { get; set; }
 
-        [JsonProperty("fp_scroll_mode")]
+        [JsonPropertyName("fp_scroll_mode")]
         public int FpScrollMode { get; set; }
 
-        [JsonProperty("bDolbyPriority")]
+        [JsonPropertyName("bDolbyPriority")]
         public int BDolbyPriority { get; set; }
 
-        [JsonProperty("ucUartOption")]
+        [JsonPropertyName("ucUartOption")]
         public int UcUartOption { get; set; }
 
-        [JsonProperty("bHideLockedChannel")]
+        [JsonPropertyName("bHideLockedChannel")]
         public int BHideLockedChannel { get; set; }
 
-        [JsonProperty("uiAntennaConnectType")]
+        [JsonPropertyName("uiAntennaConnectType")]
         public int UiAntennaConnectType { get; set; }
 
-        [JsonProperty("uiRCUType")]
+        [JsonPropertyName("uiRCUType")]
         public int UiRCUType { get; set; }
 
-        [JsonProperty("uiV12")]
+        [JsonPropertyName("uiV12")]
         public int UiV12 { get; set; }
 
-        [JsonProperty("back_to_antenna_setting")]
+        [JsonPropertyName("back_to_antenna_setting")]
         public int BackToAntennaSetting { get; set; }
 
-        [JsonProperty("enable_auto_detect_updating")]
+        [JsonPropertyName("enable_auto_detect_updating")]
         public int EnableAutoDetectUpdating { get; set; }
 
-        [JsonProperty("youtube_osd_style")]
+        [JsonPropertyName("youtube_osd_style")]
         public int YoutubeOsdStyle { get; set; }
 
-        [JsonProperty("uiSearchType")]
+        [JsonPropertyName("uiSearchType")]
         public int UiSearchType { get; set; }
 
-        [JsonProperty("uiEnableXTms")]
+        [JsonPropertyName("uiEnableXTms")]
         public int UiEnableXTms { get; set; }
 
-        [JsonProperty("bEnableSexChannel")]
+        [JsonPropertyName("bEnableSexChannel")]
         public int BEnableSexChannel { get; set; }
 
-        [JsonProperty("sds_control_isp")]
+        [JsonPropertyName("sds_control_isp")]
         public int SdsControlIsp { get; set; }
 
-        [JsonProperty("ota_update_auto")]
+        [JsonPropertyName("ota_update_auto")]
         public int OtaUpdateAuto { get; set; }
 
-        [JsonProperty("ca_type")]
+        [JsonPropertyName("ca_type")]
         public int CaType { get; set; }
 
-        [JsonProperty("SortType")]
+        [JsonPropertyName("SortType")]
         public int SortType { get; set; }
 
-        [JsonProperty("sid_number_disp")]
+        [JsonPropertyName("sid_number_disp")]
         public int SidNumberDisp { get; set; }
 
-        [JsonProperty("ci_message_enable")]
+        [JsonPropertyName("ci_message_enable")]
         public int CiMessageEnable { get; set; }
 
-        [JsonProperty("uiAspectRatio")]
+        [JsonPropertyName("uiAspectRatio")]
         public int UiAspectRatio { get; set; }
 
-        [JsonProperty("ad_service")]
+        [JsonPropertyName("ad_service")]
         public int AdService { get; set; }
 
-        [JsonProperty("ad_volume_offset")]
+        [JsonPropertyName("ad_volume_offset")]
         public int AdVolumeOffset { get; set; }
 
-        [JsonProperty("subtitle_control")]
+        [JsonPropertyName("subtitle_control")]
         public int SubtitleControl { get; set; }
 
-        [JsonProperty("sks_color_id")]
+        [JsonPropertyName("sks_color_id")]
         public int SksColorId { get; set; }
 
-        [JsonProperty("summer_time_setting")]
+        [JsonPropertyName("summer_time_setting")]
         public int SummerTimeSetting { get; set; }
 
-        [JsonProperty("usb_3g_auto_detect_provider")]
+        [JsonPropertyName("usb_3g_auto_detect_provider")]
         public int Usb3gAutoDetectProvider { get; set; }
 
-        [JsonProperty("default_net_type")]
+        [JsonPropertyName("default_net_type")]
         public int DefaultNetType { get; set; }
 
-        [JsonProperty("auto_change_channel_on_edit")]
+        [JsonPropertyName("auto_change_channel_on_edit")]
         public int AutoChangeChannelOnEdit { get; set; }
 
-        [JsonProperty("search_type_dvbt")]
+        [JsonPropertyName("search_type_dvbt")]
         public int SearchTypeDvbt { get; set; }
 
-        [JsonProperty("show_tivusat_channel_list")]
+        [JsonPropertyName("show_tivusat_channel_list")]
         public int ShowTivusatChannelList { get; set; }
 
-        [JsonProperty("need_show_tivusat_channel_change")]
+        [JsonPropertyName("need_show_tivusat_channel_change")]
         public int NeedShowTivusatChannelChange { get; set; }
 
-        [JsonProperty("search_in_standby_mode")]
+        [JsonPropertyName("search_in_standby_mode")]
         public int SearchInStandbyMode { get; set; }
 
-        [JsonProperty("search_in_operate_mode")]
+        [JsonPropertyName("search_in_operate_mode")]
         public int SearchInOperateMode { get; set; }
 
-        [JsonProperty("uiDispResolution")]
+        [JsonPropertyName("uiDispResolution")]
         public int UiDispResolution { get; set; }
 
-        [JsonProperty("auto_ota_in_standby_mode")]
+        [JsonPropertyName("auto_ota_in_standby_mode")]
         public int AutoOtaInStandbyMode { get; set; }
 
-        [JsonProperty("auto_ota_in_operate_mode")]
+        [JsonPropertyName("auto_ota_in_operate_mode")]
         public int AutoOtaInOperateMode { get; set; }
 
-        [JsonProperty("sw_update_by_ota")]
+        [JsonPropertyName("sw_update_by_ota")]
         public int SwUpdateByOta { get; set; }
 
-        [JsonProperty("need_messge_remind_sw_update")]
+        [JsonPropertyName("need_messge_remind_sw_update")]
         public int NeedMessgeRemindSwUpdate { get; set; }
 
-        [JsonProperty("vod_enable")]
+        [JsonPropertyName("vod_enable")]
         public int VodEnable { get; set; }
 
-        [JsonProperty("cPassWord")]
+        [JsonPropertyName("cPassWord")]
         public string? CPassWord { get; set; }
 
-        [JsonProperty("ucPassCtrlInfo")]
+        [JsonPropertyName("ucPassCtrlInfo")]
         public int UcPassCtrlInfo { get; set; }
 
-        [JsonProperty("ucAgeRating")]
+        [JsonPropertyName("ucAgeRating")]
         public int UcAgeRating { get; set; }
 
-        [JsonProperty("cTimeZone")]
+        [JsonPropertyName("cTimeZone")]
         public int CTimeZone { get; set; }
 
-        [JsonProperty("ucChannelState")]
+        [JsonPropertyName("ucChannelState")]
         public int UcChannelState { get; set; }
 
-        [JsonProperty("ucFavouriteType")]
+        [JsonPropertyName("ucFavouriteType")]
         public int UcFavouriteType { get; set; }
 
-        [JsonProperty("ucLanguage")]
+        [JsonPropertyName("ucLanguage")]
         public int UcLanguage { get; set; }
 
-        [JsonProperty("ucAudioLanguage")]
+        [JsonPropertyName("ucAudioLanguage")]
         public int UcAudioLanguage { get; set; }
 
-        [JsonProperty("ucAudioLan2")]
+        [JsonPropertyName("ucAudioLan2")]
         public int UcAudioLan2 { get; set; }
 
-        [JsonProperty("ucSubLanguage")]
+        [JsonPropertyName("ucSubLanguage")]
         public int UcSubLanguage { get; set; }
 
-        [JsonProperty("ucCurEPGLanuage")]
+        [JsonPropertyName("ucCurEPGLanuage")]
         public int UcCurEPGLanuage { get; set; }
 
-        [JsonProperty("ucTPFlag")]
+        [JsonPropertyName("ucTPFlag")]
         public int UcTPFlag { get; set; }
 
-        [JsonProperty("ucCurSat")]
+        [JsonPropertyName("ucCurSat")]
         public int UcCurSat { get; set; }
 
-        [JsonProperty("ucFavListTVMask_no_used")]
+        [JsonPropertyName("ucFavListTVMask_no_used")]
         public int UcFavListTVMask_no_used { get; set; }
 
-        [JsonProperty("ucFavListRadioMask_no_used")]
+        [JsonPropertyName("ucFavListRadioMask_no_used")]
         public int UcFavListRadioMask_no_used { get; set; }
 
-        [JsonProperty("aucFavReName")]
+        [JsonPropertyName("aucFavReName")]
         public List<string> AucFavReName { get; set; }
 
-        [JsonProperty("ucFavNameChangeMask")]
+        [JsonPropertyName("ucFavNameChangeMask")]
         public int UcFavNameChangeMask { get; set; }
 
-        [JsonProperty("uiNDSBoxKey")]
+        [JsonPropertyName("uiNDSBoxKey")]
         public int UiNDSBoxKey { get; set; }
 
-        [JsonProperty("dLongitudeAngle")]
+        [JsonPropertyName("dLongitudeAngle")]
         public int DLongitudeAngle { get; set; }
 
-        [JsonProperty("dLatitudeAngle")]
+        [JsonPropertyName("dLatitudeAngle")]
         public int DLatitudeAngle { get; set; }
 
-        [JsonProperty("iRotating_speedMotor1")]
+        [JsonPropertyName("iRotating_speedMotor1")]
         public int IRotating_speedMotor1 { get; set; }
 
-        [JsonProperty("uiGShareServerPort")]
+        [JsonPropertyName("uiGShareServerPort")]
         public int UiGShareServerPort { get; set; }
 
-        [JsonProperty("aucSatIndex")]
+        [JsonPropertyName("aucSatIndex")]
         public string? AucSatIndex { get; set; }
 
-        [JsonProperty("ucSharpNess")]
+        [JsonPropertyName("ucSharpNess")]
         public int UcSharpNess { get; set; }
 
-        [JsonProperty("ucContrast")]
+        [JsonPropertyName("ucContrast")]
         public int UcContrast { get; set; }
 
-        [JsonProperty("ucSaturation")]
+        [JsonPropertyName("ucSaturation")]
         public int UcSaturation { get; set; }
 
-        [JsonProperty("ucBrightness")]
+        [JsonPropertyName("ucBrightness")]
         public int UcBrightness { get; set; }
 
-        [JsonProperty("ucCASSelect")]
+        [JsonPropertyName("ucCASSelect")]
         public int UcCASSelect { get; set; }
 
-        [JsonProperty("ucUartMode")]
+        [JsonPropertyName("ucUartMode")]
         public int UcUartMode { get; set; }
 
-        [JsonProperty("ucModulatorNo")]
+        [JsonPropertyName("ucModulatorNo")]
         public int UcModulatorNo { get; set; }
 
-        [JsonProperty("ucRFAudio")]
+        [JsonPropertyName("ucRFAudio")]
         public int UcRFAudio { get; set; }
 
-        [JsonProperty("ucEPGStyle")]
+        [JsonPropertyName("ucEPGStyle")]
         public int UcEPGStyle { get; set; }
 
-        [JsonProperty("sTPFreq")]
+        [JsonPropertyName("sTPFreq")]
         public int STPFreq { get; set; }
 
-        [JsonProperty("sTPSymbol")]
+        [JsonPropertyName("sTPSymbol")]
         public int STPSymbol { get; set; }
 
-        [JsonProperty("usInternalPort")]
+        [JsonPropertyName("usInternalPort")]
         public int UsInternalPort { get; set; }
 
-        [JsonProperty("gstManualTime")]
+        [JsonPropertyName("gstManualTime")]
         public ManualTime? GstManualTime { get; set; }
 
-        [JsonProperty("stUSBSetting")]
+        [JsonPropertyName("stUSBSetting")]
         public USBSetting? StUSBSetting { get; set; }
 
-        [JsonProperty("stIPConfig")]
+        [JsonPropertyName("stIPConfig")]
         public IPConfig? StIPConfig { get; set; }
 
-        [JsonProperty("stWifiIPConfig")]
+        [JsonPropertyName("stWifiIPConfig")]
         public IPConfig? StWifiIPConfig { get; set; }
 
-        [JsonProperty("ucSNChecked")]
+        [JsonPropertyName("ucSNChecked")]
         public int UcSNChecked { get; set; }
 
-        [JsonProperty("uiSdsSat")]
+        [JsonPropertyName("uiSdsSat")]
         public int UiSdsSat { get; set; }
 
-        [JsonProperty("ucSNStatus")]
+        [JsonPropertyName("ucSNStatus")]
         public int UcSNStatus { get; set; }
 
-        [JsonProperty("ucCountry")]
+        [JsonPropertyName("ucCountry")]
         public int UcCountry { get; set; }
 
-        [JsonProperty("weather_bar_enable")]
+        [JsonPropertyName("weather_bar_enable")]
         public int WeatherBarEnable { get; set; }
 
-        [JsonProperty("uiAPDStandBy")]
+        [JsonPropertyName("uiAPDStandBy")]
         public int UiAPDStandBy { get; set; }
 
-        [JsonProperty("uiSDSMode")]
+        [JsonPropertyName("uiSDSMode")]
         public int UiSDSMode { get; set; }
 
-        [JsonProperty("uiFPLightLevel")]
+        [JsonPropertyName("uiFPLightLevel")]
         public int UiFPLightLevel { get; set; }
 
-        [JsonProperty("cur_channel_list_id")]
+        [JsonPropertyName("cur_channel_list_id")]
         public int CurChannelListId { get; set; }
 
-        [JsonProperty("ucLCNOn")]
+        [JsonPropertyName("ucLCNOn")]
         public int UcLCNOn { get; set; }
 
-        [JsonProperty("global_nit_tp_freq")]
+        [JsonPropertyName("global_nit_tp_freq")]
         public int GlobalNitTpFreq { get; set; }
 
-        [JsonProperty("cec_config")]
+        [JsonPropertyName("cec_config")]
         public CECConfig? CecConfig { get; set; }
 
-        [JsonProperty("ms_tp")]
+        [JsonPropertyName("ms_tp")]
         public int MsTp { get; set; }
 
-        [JsonProperty("ms_tp_isid")]
+        [JsonPropertyName("ms_tp_isid")]
         public int MsTpIsid { get; set; }
 
-        [JsonProperty("tsn_tp")]
+        [JsonPropertyName("tsn_tp")]
         public int TsnTp { get; set; }
 
-        [JsonProperty("tsn_tp_id")]
+        [JsonPropertyName("tsn_tp_id")]
         public int TsnTpId { get; set; }
 
         public BoxObject()

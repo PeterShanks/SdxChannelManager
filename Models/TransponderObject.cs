@@ -1,46 +1,46 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace SdxChannelManager.Models
 {
     public class TransponderFlagStruct
     {
-        [JsonProperty("POL")]
+        [JsonPropertyName("POL")]
         public int POL { get; set; }
 
-        [JsonProperty("FEC")]
+        [JsonPropertyName("FEC")]
         public int FEC { get; set; }
 
-        [JsonProperty("IQ")]
+        [JsonPropertyName("IQ")]
         public int IQ { get; set; }
 
-        [JsonProperty("SatIndex")]
+        [JsonPropertyName("SatIndex")]
         public int SatIndex { get; set; }
 
-        [JsonProperty("NetNameNo")]
+        [JsonPropertyName("NetNameNo")]
         public int NetNameNo { get; set; }
 
-        [JsonProperty("TPIndex")]
+        [JsonPropertyName("TPIndex")]
         public int TPIndex { get; set; }
     }
 
     public class TransponderObject
     {
-        [JsonProperty("usStartCode")]
+        [JsonPropertyName("usStartCode")]
         public int UsStartCode { get; set; }
 
-        [JsonProperty("usNetworkLen")]
+        [JsonPropertyName("usNetworkLen")]
         public int UsNetworkLen { get; set; }
 
-        [JsonProperty("Freq")]
+        [JsonPropertyName("Freq")]
         public int Freq { get; set; }
 
-        [JsonProperty("SR")]
+        [JsonPropertyName("SR")]
         public int SR { get; set; }
 
-        [JsonProperty("stFlag")]
+        [JsonPropertyName("stFlag")]
         public TransponderFlagStruct? StFlag { get; set; }
 
-        [JsonProperty("NetName")]
+        [JsonPropertyName("NetName")]
         public List<string> NetName { get; set; }
 
         public TransponderObject()

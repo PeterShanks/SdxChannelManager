@@ -1,9 +1,8 @@
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace SdxChannelManager.Models
 {
@@ -118,28 +117,18 @@ namespace SdxChannelManager.Models
                 for (int i = 0; i < SatelliteObjects.Count; i++)
                 {
                     string newKey = "satellite_object_" + i;
-                    var satelliteJson = JObject.FromObject(SatelliteObjects[i]);
+                    var satelliteJson = JsonSerializer.Serialize(SatelliteObjects[i]);
                     
-                    var updatedObj = new JObject
-                    {
-                        [newKey] = satelliteJson
-                    };
-                    
-                    sb.Append(updatedObj.ToString(Formatting.None));
+                    sb.Append($"{{\"{newKey}\":{satelliteJson}}}");
                 }
                 
                 // Write Transponder objects with sequential indices starting from 0
                 for (int i = 0; i < TransponderObjects.Count; i++)
                 {
                     string newKey = "transponder_object_" + i;
-                    var transponderJson = JObject.FromObject(TransponderObjects[i]);
+                    var transponderJson = JsonSerializer.Serialize(TransponderObjects[i]);
                     
-                    var updatedObj = new JObject
-                    {
-                        [newKey] = transponderJson
-                    };
-                    
-                    sb.Append(updatedObj.ToString(Formatting.None));
+                    sb.Append($"{{\"{newKey}\":{transponderJson}}}");
                 }
                 
                 // Write TV channels with sequential indices starting from 0
@@ -149,14 +138,9 @@ namespace SdxChannelManager.Models
                     string newKey = "program_tv_object_" + i;
                     
                     // Update the RawData with the new key and any modified data from ChannelData
-                    var channelDataJson = JObject.FromObject(channel.ChannelData);
+                    var channelDataJson = JsonSerializer.Serialize(channel.ChannelData);
                     
-                    var updatedObj = new JObject
-                    {
-                        [newKey] = channelDataJson
-                    };
-                    
-                    sb.Append(updatedObj.ToString(Formatting.None));
+                    sb.Append($"{{\"{newKey}\":{channelDataJson}}}");
                 }
                 
                 // Write Radio channels with sequential indices starting from 0
@@ -166,54 +150,37 @@ namespace SdxChannelManager.Models
                     string newKey = "program_radio_object_" + i;
                     
                     // Update the RawData with the new key and any modified data from ChannelData
-                    var channelDataJson = JObject.FromObject(channel.ChannelData);
+                    var channelDataJson = JsonSerializer.Serialize(channel.ChannelData);
                     
-                    var updatedObj = new JObject
-                    {
-                        [newKey] = channelDataJson
-                    };
-                    
-                    sb.Append(updatedObj.ToString(Formatting.None));
+                    sb.Append($"{{\"{newKey}\":{channelDataJson}}}");
                 }
                 
                 // Write box_object
                 if (BoxObject != null)
                 {
-                    var boxObj = new JObject
-                    {
-                        ["box_object"] = JObject.FromObject(BoxObject)
-                    };
-                    sb.Append(boxObj.ToString(Formatting.None));
+                    var boxJson = JsonSerializer.Serialize(BoxObject);
+                    sb.Append($"{{\"box_object\":{boxJson}}}");
                 }
                 
                 // Write watching_prog_object
                 if (WatchingProgObject != null)
                 {
-                    var watchObj = new JObject
-                    {
-                        ["watching_prog_object"] = JObject.FromObject(WatchingProgObject)
-                    };
-                    sb.Append(watchObj.ToString(Formatting.None));
+                    var watchJson = JsonSerializer.Serialize(WatchingProgObject);
+                    sb.Append($"{{\"watching_prog_object\":{watchJson}}}");
                 }
                 
                 // Write fav_list_objects (0-25)
                 for (int i = 0; i < FavListObjects.Count && i < 26; i++)
                 {
-                    var favObj = new JObject
-                    {
-                        [$"fav_list_object_{i}"] = JObject.FromObject(FavListObjects[i])
-                    };
-                    sb.Append(favObj.ToString(Formatting.None));
+                    var favJson = JsonSerializer.Serialize(FavListObjects[i]);
+                    sb.Append($"{{\"fav_list_object_{i}\":{favJson}}}");
                 }
                 
                 // Write fav_list_info_in_box_object
                 if (FavListInfoInBoxObject != null)
                 {
-                    var favInfoObj = new JObject
-                    {
-                        ["fav_list_info_in_box_object"] = JObject.FromObject(FavListInfoInBoxObject)
-                    };
-                    sb.Append(favInfoObj.ToString(Formatting.None));
+                    var favInfoJson = JsonSerializer.Serialize(FavListInfoInBoxObject);
+                    sb.Append($"{{\"fav_list_info_in_box_object\":{favInfoJson}}}");
                 }
                 
                 // Write database_header_object
@@ -225,21 +192,15 @@ namespace SdxChannelManager.Models
                     DatabaseHeaderObject.SSatellite = SatelliteObjects.Count;
                     DatabaseHeaderObject.STransponder = TransponderObjects.Count;
                     
-                    var headerObj = new JObject
-                    {
-                        ["database_header_object"] = JObject.FromObject(DatabaseHeaderObject)
-                    };
-                    sb.Append(headerObj.ToString(Formatting.None));
+                    var headerJson = JsonSerializer.Serialize(DatabaseHeaderObject);
+                    sb.Append($"{{\"database_header_object\":{headerJson}}}");
                 }
                 
                 // Write global_variable_object
                 if (GlobalVariableObject != null)
                 {
-                    var globalObj = new JObject
-                    {
-                        ["global_variable_object"] = JObject.FromObject(GlobalVariableObject)
-                    };
-                    sb.Append(globalObj.ToString(Formatting.None));
+                    var globalJson = JsonSerializer.Serialize(GlobalVariableObject);
+                    sb.Append($"{{\"global_variable_object\":{globalJson}}}");
                 }
                 
                 // Write to file
@@ -254,9 +215,9 @@ namespace SdxChannelManager.Models
             }
         }
         
-        private static List<JObject> ParseConcatenatedJson(string content)
+        private static List<JsonElement> ParseConcatenatedJson(string content)
         {
-            var objects = new List<JObject>();
+            var objects = new List<JsonElement>();
             int depth = 0;
             int startIndex = -1;
             
@@ -278,8 +239,8 @@ namespace SdxChannelManager.Models
                         try
                         {
                             string jsonStr = content.Substring(startIndex, i - startIndex + 1);
-                            var obj = JObject.Parse(jsonStr);
-                            objects.Add(obj);
+                            var doc = JsonDocument.Parse(jsonStr);
+                            objects.Add(doc.RootElement.Clone());
                         }
                         catch
                         {
@@ -293,15 +254,17 @@ namespace SdxChannelManager.Models
             return objects;
         }
         
-        private static void ParseObject(JObject obj, SdxDatabase database)
+        private static void ParseObject(JsonElement obj, SdxDatabase database)
         {
             // Get the first property name which contains the object type and index
-            var firstProperty = obj.Properties().FirstOrDefault();
-            if (firstProperty == null) return;
+            if (obj.ValueKind != JsonValueKind.Object) return;
             
+            var enumerator = obj.EnumerateObject();
+            if (!enumerator.MoveNext()) return;
+            
+            var firstProperty = enumerator.Current;
             string key = firstProperty.Name;
-            var value = firstProperty.Value as JObject;
-            if (value == null) return;
+            var value = firstProperty.Value;
             
             try
             {
@@ -315,10 +278,12 @@ namespace SdxChannelManager.Models
                     if (match.Success && int.TryParse(match.Value, out int index))
                     {
                         // Extract service name
-                        string serviceName = value["ServiceName"]?.ToString() ?? "Unknown";
+                        string serviceName = value.TryGetProperty("ServiceName", out var nameElement) 
+                            ? nameElement.GetString() ?? "Unknown" 
+                            : "Unknown";
                         
                         // Parse the channel data with all properties
-                        var channelData = value.ToObject<ProgramChannelData>() ?? new ProgramChannelData();
+                        var channelData = JsonSerializer.Deserialize<ProgramChannelData>(value.GetRawText()) ?? new ProgramChannelData();
                         
                         var channel = new SdxChannel
                         {
@@ -326,7 +291,7 @@ namespace SdxChannelManager.Models
                             Index = index,
                             IsRadio = isRadio,
                             ServiceName = serviceName,
-                            RawData = obj,
+                            RawData = obj.Clone(),
                             ChannelData = channelData
                         };
                         
@@ -335,42 +300,42 @@ namespace SdxChannelManager.Models
                 }
                 else if (key.StartsWith("satellite_object_"))
                 {
-                    var satellite = value.ToObject<SatelliteObject>();
+                    var satellite = JsonSerializer.Deserialize<SatelliteObject>(value.GetRawText());
                     if (satellite != null) database.SatelliteObjects.Add(satellite);
                 }
                 else if (key.StartsWith("transponder_object_"))
                 {
-                    var transponder = value.ToObject<TransponderObject>();
+                    var transponder = JsonSerializer.Deserialize<TransponderObject>(value.GetRawText());
                     if (transponder != null) database.TransponderObjects.Add(transponder);
                 }
                 else if (key == "box_object")
                 {
-                    var boxObj = value.ToObject<BoxObject>();
+                    var boxObj = JsonSerializer.Deserialize<BoxObject>(value.GetRawText());
                     if (boxObj != null) database.BoxObject = boxObj;
                 }
                 else if (key == "watching_prog_object")
                 {
-                    var watchObj = value.ToObject<WatchingProgObject>();
+                    var watchObj = JsonSerializer.Deserialize<WatchingProgObject>(value.GetRawText());
                     if (watchObj != null) database.WatchingProgObject = watchObj;
                 }
                 else if (key.StartsWith("fav_list_object_"))
                 {
-                    var favList = value.ToObject<FavListObject>();
+                    var favList = JsonSerializer.Deserialize<FavListObject>(value.GetRawText());
                     if (favList != null) database.FavListObjects.Add(favList);
                 }
                 else if (key == "fav_list_info_in_box_object")
                 {
-                    var favInfoObj = value.ToObject<FavListInfoInBoxObject>();
+                    var favInfoObj = JsonSerializer.Deserialize<FavListInfoInBoxObject>(value.GetRawText());
                     if (favInfoObj != null) database.FavListInfoInBoxObject = favInfoObj;
                 }
                 else if (key == "database_header_object")
                 {
-                    var headerObj = value.ToObject<DatabaseHeaderObject>();
+                    var headerObj = JsonSerializer.Deserialize<DatabaseHeaderObject>(value.GetRawText());
                     if (headerObj != null) database.DatabaseHeaderObject = headerObj;
                 }
                 else if (key == "global_variable_object")
                 {
-                    var globalObj = value.ToObject<GlobalVariableObject>();
+                    var globalObj = JsonSerializer.Deserialize<GlobalVariableObject>(value.GetRawText());
                     if (globalObj != null) database.GlobalVariableObject = globalObj;
                 }
                 else

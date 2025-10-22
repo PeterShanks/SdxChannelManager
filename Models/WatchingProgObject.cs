@@ -1,19 +1,19 @@
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 
 namespace SdxChannelManager.Models
 {
     public class WatchingProgObject
     {
-        [JsonProperty("stProgNo")]
+        [JsonPropertyName("stProgNo")]
         public ServiceIdStruct? StProgNo { get; set; }
 
-        [JsonProperty("usTransportStreamID")]
+        [JsonPropertyName("usTransportStreamID")]
         public int UsTransportStreamID { get; set; }
 
-        [JsonProperty("usOriginalNetworkID")]
+        [JsonPropertyName("usOriginalNetworkID")]
         public int UsOriginalNetworkID { get; set; }
 
-        [JsonProperty("usFavSelect")]
+        [JsonPropertyName("usFavSelect")]
         public int[] UsFavSelect { get; set; }
 
         public WatchingProgObject()
