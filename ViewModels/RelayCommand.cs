@@ -1,6 +1,6 @@
 using System.Windows.Input;
 
-namespace SdxChannelSorter.ViewModels
+namespace SdxChannelManager.ViewModels
 {
     public class RelayCommand : ICommand
     {

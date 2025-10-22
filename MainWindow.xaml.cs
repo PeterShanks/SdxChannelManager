@@ -1,7 +1,7 @@
 ﻿using System.Windows;
-using SdxChannelSorter.ViewModels;
+using SdxChannelManager.ViewModels;
 
-namespace SdxChannelSorter
+namespace SdxChannelManager
 {
     public partial class MainWindow : Window
     {

@@ -1,11 +1,11 @@
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
-namespace SdxChannelSorter.Models
+namespace SdxChannelManager.Models
 {
     public class SdxDatabase
     {

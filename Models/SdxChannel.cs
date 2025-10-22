@@ -1,6 +1,6 @@
 using Newtonsoft.Json.Linq;
 
-namespace SdxChannelSorter.Models
+namespace SdxChannelManager.Models
 {
     public class SdxChannel
     {

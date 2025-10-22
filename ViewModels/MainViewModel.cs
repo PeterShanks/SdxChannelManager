@@ -4,9 +4,9 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using Microsoft.Win32;
-using SdxChannelSorter.Models;
+using SdxChannelManager.Models;
 
-namespace SdxChannelSorter.ViewModels
+namespace SdxChannelManager.ViewModels
 {
     public class MainViewModel : INotifyPropertyChanged
     {

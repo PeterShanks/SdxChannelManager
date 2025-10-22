@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace SdxChannelSorter.Models
+namespace SdxChannelManager.Models
 {
     public class AudioPidInfo
     {

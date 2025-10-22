@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace SdxChannelSorter;
+namespace SdxChannelManager;
 
 /// <summary>
 /// Interaction logic for App.xaml
