@@ -14,7 +14,6 @@ namespace SdxChannelManager.Models
         public ProgramChannelData ChannelData { get; set; }
         
         // Display properties
-        public string DisplayName => $"{(IsRadio ? "🔊" : "📺")} {ServiceName}";
         public string Type => IsRadio ? "Radio" : "TV";
         
         // Constructor

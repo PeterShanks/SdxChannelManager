@@ -22,24 +22,25 @@ namespace SdxChannelManager.Models
         [JsonPropertyName("PID")]
         public int PID { get; set; }
 
-        [JsonPropertyName("Mode")]
-        public int Mode { get; set; }
-
         [JsonPropertyName("Lang")]
         public int Lang { get; set; }
 
         [JsonPropertyName("Type")]
         public int Type { get; set; }
 
-        [JsonPropertyName("CompPage")]
-        public int CompPage { get; set; }
+        [JsonPropertyName("CompPageID")]
+        public int CompPageID { get; set; }
 
-        [JsonPropertyName("AncPage")]
-        public int AncPage { get; set; }
+        [JsonPropertyName("AnciPageID")]
+        public int AnciPageID { get; set; }
     }
 
     public class ServiceIdStruct
     {
+        [JsonPropertyName("uiWord32")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]
+        public int? UiWord32 { get; set; }
+
         [JsonPropertyName("ServiceID")]
         public string? ServiceID { get; set; }
 

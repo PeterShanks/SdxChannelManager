@@ -208,7 +208,7 @@ using (var writer = new StreamWriter(filePath, false, Encoding.UTF8))
 }
 ```
 
-### 5. Object Ordering Sequence - MUST FOLLOW
+### 5. Object Ordering Sequence - MUST FOLLOW (VERIFIED)
 
 Write objects in this exact order:
 
@@ -217,15 +217,23 @@ Write objects in this exact order:
 2. transponder_object_0 to transponder_object_N
 3. program_tv_object_0 to program_tv_object_N
 4. program_radio_object_0 to program_radio_object_N
-5. fav_list_object_0 to fav_list_object_N
-6. box_object
-7. database_header_object
-8. global_variable_object
-9. fav_list_info_in_box_object
-10. watching_prog_object
+5. box_object
+6. watching_prog_object
+7. fav_list_object_0 to fav_list_object_N
+8. fav_list_info_in_box_object
+9. database_header_object
+10. global_variable_object
 ```
 
-**This order is not arbitrary** - the receiver expects objects in this sequence.
+**⚠️ IMPORTANT:** This order was verified by analyzing byte positions in actual files. Previous documentation had incorrect ordering!
+
+**Verified positions in reference file:**
+- Position 4,009,981: box_object
+- Position 4,014,220: watching_prog_object
+- Position 4,014,430: fav_list_object_0
+- Position 4,018,034: fav_list_info_in_box_object
+- Position 4,018,490: database_header_object
+- Position 4,018,841: global_variable_object
 
 ### 6. Data Validation Rules
 

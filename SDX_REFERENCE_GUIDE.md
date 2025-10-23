@@ -2,7 +2,7 @@
 
 This document provides detailed information about enum values, bit flags, and data interpretations needed for implementing features.
 
-## 🔄 VALIDATION NOTES (Updated After File Analysis)
+## 🔄 VALIDATION NOTES (Updated After File Analysis & Byte-Perfect Debugging)
 
 This documentation has been **validated and corrected** against your actual SDX file. Key corrections made:
 
@@ -14,6 +14,15 @@ This documentation has been **validated and corrected** against your actual SDX 
 5. **✅ Satellite `SatAngle`** - Values are multiplied by 10 (70 = 7.0°)
 6. **✅ `VideoCodec` values** - Confirmed: 1=MPEG-2, 2=H.264, 4=HEVC
 7. **✅ `HD` values** - Found: 0, 1, 2, 3 (likely SD, HD, Full HD, UHD)
+
+### Byte-Perfect Output Fixes (CRITICAL):
+8. **✅ SubtitlePidInfo structure** - Properties are `CompPageID` and `AnciPageID` (NOT `CompPage`/`AncPage`), NO `Mode` property
+9. **✅ Comma rules** - ONLY TV programs have commas between them, Radio programs do NOT
+10. **✅ Object order** - Actual order differs from original documentation (see implementation guide)
+11. **✅ Optional properties** - `TransponderObject.NetName` and `ExtData` are nullable and conditional
+12. **✅ ServiceIdStruct** - Has `uiWord32` but only serialized in `watching_prog_object`
+13. **✅ UTF-8 encoding** - Must be without BOM
+14. **✅ Unicode escapes** - Must be lowercase (`\u001f` not `\u001F`)
 
 ### New Structures Documented:
 - **Transponder `ext_data`** - Multistream/DVB-S2X parameters

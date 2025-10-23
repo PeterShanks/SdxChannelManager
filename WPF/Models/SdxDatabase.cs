@@ -30,32 +30,6 @@ namespace SdxChannelManager.Models
             FilePath = string.Empty;
         }
         
-        public ObservableCollection<SdxChannel> GetTvChannels()
-        {
-            var tvChannels = new ObservableCollection<SdxChannel>();
-            foreach (var channel in Channels)
-            {
-                if (!channel.IsRadio)
-                {
-                    tvChannels.Add(channel);
-                }
-            }
-            return tvChannels;
-        }
-        
-        public ObservableCollection<SdxChannel> GetRadioChannels()
-        {
-            var radioChannels = new ObservableCollection<SdxChannel>();
-            foreach (var channel in Channels)
-            {
-                if (channel.IsRadio)
-                {
-                    radioChannels.Add(channel);
-                }
-            }
-            return radioChannels;
-        }
-        
         /// <summary>
         /// Loads an SDX database file from disk
         /// </summary>
@@ -109,6 +83,14 @@ namespace SdxChannelManager.Models
             {
                 var sb = new StringBuilder();
                 
+                // Configure JSON serializer to match original file format exactly
+                var jsonOptions = new JsonSerializerOptions
+                {
+                    WriteIndented = false,
+                    DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
+                    Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+                };
+                
                 // Separate TV and Radio channels
                 var tvChannels = Channels.Where(c => !c.IsRadio).ToList();
                 var radioChannels = Channels.Where(c => c.IsRadio).ToList();
@@ -117,7 +99,7 @@ namespace SdxChannelManager.Models
                 for (int i = 0; i < SatelliteObjects.Count; i++)
                 {
                     string newKey = "satellite_object_" + i;
-                    var satelliteJson = JsonSerializer.Serialize(SatelliteObjects[i]);
+                    var satelliteJson = JsonSerializer.Serialize(SatelliteObjects[i], jsonOptions);
                     
                     sb.Append($"{{\"{newKey}\":{satelliteJson}}}");
                 }
@@ -126,60 +108,76 @@ namespace SdxChannelManager.Models
                 for (int i = 0; i < TransponderObjects.Count; i++)
                 {
                     string newKey = "transponder_object_" + i;
-                    var transponderJson = JsonSerializer.Serialize(TransponderObjects[i]);
+                    var transponderJson = JsonSerializer.Serialize(TransponderObjects[i], jsonOptions);
                     
                     sb.Append($"{{\"{newKey}\":{transponderJson}}}");
                 }
                 
+                // Add comma after last transponder before TV programs (special case)
+                if (TransponderObjects.Count > 0 && tvChannels.Count > 0)
+                {
+                    sb.Append(",");
+                }
+                
                 // Write TV channels with sequential indices starting from 0
+                // NOTE: TV program objects have commas between them (unlike satellites/transponders)
                 for (int i = 0; i < tvChannels.Count; i++)
                 {
                     var channel = tvChannels[i];
                     string newKey = "program_tv_object_" + i;
                     
                     // Update the RawData with the new key and any modified data from ChannelData
-                    var channelDataJson = JsonSerializer.Serialize(channel.ChannelData);
+                    var channelDataJson = JsonSerializer.Serialize(channel.ChannelData, jsonOptions);
                     
                     sb.Append($"{{\"{newKey}\":{channelDataJson}}}");
+                    
+                    // Add comma after each TV program object (except the last one)
+                    if (i < tvChannels.Count - 1)
+                    {
+                        sb.Append(",");
+                    }
                 }
                 
                 // Write Radio channels with sequential indices starting from 0
+                // NOTE: Radio program objects do NOT have commas between them (same as satellites, transponders, fav lists)
                 for (int i = 0; i < radioChannels.Count; i++)
                 {
                     var channel = radioChannels[i];
                     string newKey = "program_radio_object_" + i;
                     
                     // Update the RawData with the new key and any modified data from ChannelData
-                    var channelDataJson = JsonSerializer.Serialize(channel.ChannelData);
+                    var channelDataJson = JsonSerializer.Serialize(channel.ChannelData, jsonOptions);
                     
                     sb.Append($"{{\"{newKey}\":{channelDataJson}}}");
+                    
+                    // NO commas between radio program objects
                 }
                 
-                // Write box_object
+                // Write box_object (comes BEFORE favorite lists in this file format!)
                 if (BoxObject != null)
                 {
-                    var boxJson = JsonSerializer.Serialize(BoxObject);
+                    var boxJson = JsonSerializer.Serialize(BoxObject, jsonOptions);
                     sb.Append($"{{\"box_object\":{boxJson}}}");
                 }
                 
-                // Write watching_prog_object
+                // Write watching_prog_object (comes BEFORE favorite lists in this file format!)
                 if (WatchingProgObject != null)
                 {
-                    var watchJson = JsonSerializer.Serialize(WatchingProgObject);
+                    var watchJson = JsonSerializer.Serialize(WatchingProgObject, jsonOptions);
                     sb.Append($"{{\"watching_prog_object\":{watchJson}}}");
                 }
                 
                 // Write fav_list_objects (0-25)
                 for (int i = 0; i < FavListObjects.Count && i < 26; i++)
                 {
-                    var favJson = JsonSerializer.Serialize(FavListObjects[i]);
+                    var favJson = JsonSerializer.Serialize(FavListObjects[i], jsonOptions);
                     sb.Append($"{{\"fav_list_object_{i}\":{favJson}}}");
                 }
                 
                 // Write fav_list_info_in_box_object
                 if (FavListInfoInBoxObject != null)
                 {
-                    var favInfoJson = JsonSerializer.Serialize(FavListInfoInBoxObject);
+                    var favInfoJson = JsonSerializer.Serialize(FavListInfoInBoxObject, jsonOptions);
                     sb.Append($"{{\"fav_list_info_in_box_object\":{favInfoJson}}}");
                 }
                 
@@ -192,19 +190,26 @@ namespace SdxChannelManager.Models
                     DatabaseHeaderObject.SSatellite = SatelliteObjects.Count;
                     DatabaseHeaderObject.STransponder = TransponderObjects.Count;
                     
-                    var headerJson = JsonSerializer.Serialize(DatabaseHeaderObject);
+                    var headerJson = JsonSerializer.Serialize(DatabaseHeaderObject, jsonOptions);
                     sb.Append($"{{\"database_header_object\":{headerJson}}}");
                 }
                 
-                // Write global_variable_object
+                // Write global_variable_object (MUST BE LAST!)
                 if (GlobalVariableObject != null)
                 {
-                    var globalJson = JsonSerializer.Serialize(GlobalVariableObject);
+                    var globalJson = JsonSerializer.Serialize(GlobalVariableObject, jsonOptions);
                     sb.Append($"{{\"global_variable_object\":{globalJson}}}");
                 }
                 
-                // Write to file
-                File.WriteAllText(targetPath, sb.ToString(), Encoding.UTF8);
+                // Write to file (UTF-8 WITHOUT BOM - critical for embedded systems!)
+                var utf8WithoutBom = new UTF8Encoding(false); // false = no BOM
+                
+                // Fix Unicode escape sequences to lowercase (e.g., \u001F -> \u001f) to match original format
+                var content = sb.ToString();
+                content = System.Text.RegularExpressions.Regex.Replace(content, @"\\u([0-9A-F]{4})", 
+                    m => $"\\u{m.Groups[1].Value.ToLower()}");
+                
+                File.WriteAllText(targetPath, content, utf8WithoutBom);
                 
                 // Update FilePath if we saved to a new location
                 FilePath = targetPath;

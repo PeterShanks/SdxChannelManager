@@ -15,12 +15,24 @@ namespace SdxChannelManager.ViewModels
         private string _statusMessage;
         private bool _showTvChannels;
         private bool _showRadioChannels;
+        private int _totalTvChannels;
+        private int _totalRadioChannels;
+        private int _totalSatellites;
+        private int _totalTransponders;
+        private string _fileName;
+        private string _fileSize;
+        private bool _showWelcome;
+        private bool _showChannels;
 
         public MainViewModel()
         {
             _statusMessage = "Ready. Open an SDX file to begin.";
             _showTvChannels = true;
             _showRadioChannels = false;
+            _fileName = "No file loaded";
+            _fileSize = "";
+            _showWelcome = true;
+            _showChannels = false;
 
             // Initialize commands
             OpenFileCommand = new RelayCommand(_ => OpenFile());
@@ -89,6 +101,110 @@ namespace SdxChannelManager.ViewModels
             }
         }
 
+        public int TotalTvChannels
+        {
+            get => _totalTvChannels;
+            set
+            {
+                if (_totalTvChannels != value)
+                {
+                    _totalTvChannels = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public int TotalRadioChannels
+        {
+            get => _totalRadioChannels;
+            set
+            {
+                if (_totalRadioChannels != value)
+                {
+                    _totalRadioChannels = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public int TotalSatellites
+        {
+            get => _totalSatellites;
+            set
+            {
+                if (_totalSatellites != value)
+                {
+                    _totalSatellites = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public int TotalTransponders
+        {
+            get => _totalTransponders;
+            set
+            {
+                if (_totalTransponders != value)
+                {
+                    _totalTransponders = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string FileName
+        {
+            get => _fileName;
+            set
+            {
+                if (_fileName != value)
+                {
+                    _fileName = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string FileSize
+        {
+            get => _fileSize;
+            set
+            {
+                if (_fileSize != value)
+                {
+                    _fileSize = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public bool ShowWelcome
+        {
+            get => _showWelcome;
+            set
+            {
+                if (_showWelcome != value)
+                {
+                    _showWelcome = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public bool ShowChannels
+        {
+            get => _showChannels;
+            set
+            {
+                if (_showChannels != value)
+                {
+                    _showChannels = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public ICommand OpenFileCommand { get; }
         public ICommand SaveFileCommand { get; }
         public ICommand SaveAsFileCommand { get; }
@@ -112,17 +228,39 @@ namespace SdxChannelManager.ViewModels
                     StatusMessage = "Loading file...";
                     _database = SdxDatabase.Load(dialog.FileName);
                     
+                    // Update statistics
+                    UpdateStatistics();
+                    
+                    // Update file info
+                    FileName = System.IO.Path.GetFileName(dialog.FileName);
+                    var fileInfo = new System.IO.FileInfo(dialog.FileName);
+                    FileSize = $"{fileInfo.Length / 1024.0 / 1024.0:F2} MB";
+                    
+                    // Hide welcome, show channels
+                    ShowWelcome = false;
+                    ShowChannels = true;
+                    
                     // Show TV channels by default
                     LoadTvChannels();
                     
-                    StatusMessage = $"Loaded {_database.Channels.Count} channels from {System.IO.Path.GetFileName(dialog.FileName)}";
+                    StatusMessage = $"✅ Loaded {_database.Channels.Count} channels from {System.IO.Path.GetFileName(dialog.FileName)}";
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error opening file: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                StatusMessage = "Error loading file.";
+                StatusMessage = "❌ Error loading file.";
             }
+        }
+        
+        private void UpdateStatistics()
+        {
+            if (_database == null) return;
+            
+            TotalTvChannels = _database.Channels.Count(c => !c.IsRadio);
+            TotalRadioChannels = _database.Channels.Count(c => c.IsRadio);
+            TotalSatellites = _database.SatelliteObjects.Count;
+            TotalTransponders = _database.TransponderObjects.Count;
         }
 
         private void SaveFile()

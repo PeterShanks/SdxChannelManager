@@ -41,11 +41,19 @@ namespace SdxChannelManager.Models
         public TransponderFlagStruct? StFlag { get; set; }
 
         [JsonPropertyName("NetName")]
-        public List<string> NetName { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public List<string>? NetName { get; set; }
+
+        // Track whether ext_data was present in original file
+        [JsonPropertyName("ext_data")]
+        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        public object? ExtData { get; set; }
 
         public TransponderObject()
         {
-            NetName = new List<string>();
+            // Don't initialize optional properties - let them be null if not present
+            NetName = null;
+            ExtData = null;
         }
     }
 }
