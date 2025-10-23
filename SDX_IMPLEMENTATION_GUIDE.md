@@ -101,13 +101,19 @@ When reordering or deleting channels, update these references:
 ```json
 {
   "fav_list_object_0": {
-    "stProgNo": [0, 5, 10, 25],  // ⚠️ Array of program indices
+    "stProgNo": [],  // ⚠️ ASSUMED: Array of program unknown objects
     "sNoOfTVFavor": 4,            // ⚠️ Count of TV channels in list
     "sNoOfRadioFavor": 0          // ⚠️ Count of radio channels in list
   }
 }
 ```
-**Action:** When reordering channels:
+**⚠️ NOTE:** The exact structure of `stProgNo` array items is **unverified**. It may contain:
+- Integer indices (as shown above - most likely)
+- ServiceID strings
+- Objects similar to `program.stProgNo` structure
+- Test with actual favorite lists to confirm!
+
+**Action:** When reordering channels (if `stProgNo` contains indices):
 1. Update all indices in `stProgNo` arrays across ALL favorite lists
 2. Update `sNoOfTVFavor` and `sNoOfRadioFavor` counts if needed
 

@@ -104,6 +104,24 @@ Found in SubtArray:
 
 *Note: Language codes appear to be custom indices, not standard ISO 639-2. Likely receiver-specific mapping.*
 
+### Audio Array Structure ✅ VERIFIED
+
+Each audio track in `AudioArray` has these properties:
+
+```csharp
+public class AudioTrack
+{
+    public int PID { get; set; }      // Audio PID (e.g., 2311)
+    public int Mode { get; set; }     // Audio mode (typically 0)
+    public int Lang { get; set; }     // Language code (0, 3, 15, 18, 21, 26, etc.)
+    public int Codec { get; set; }    // Audio codec (1=MP2, 2=AAC, 3=AC3, 4=E-AC3, 5=Mixed)
+}
+```
+
+**Note:** All TV and radio programs have at least one audio track. Verified from 100% of samples.
+
+---
+
 ### Transponder Extended Data (Multistream/DVB-S2X)
 
 Some transponders have an optional `ext_data` object for advanced DVB-S2/S2X features:
@@ -119,10 +137,11 @@ public class TransponderExtData
 }
 ```
 
-**NetName Array:**
+**NetName Array:** ✅ VERIFIED
 Transponders can have 0 or more network names (string array):
 - `usNetworkLen`: Length/count indicator (0-10 observed)
 - `NetName`: Array of network name strings (optional, can be missing if usNetworkLen=0)
+**Verified:** 32 out of 50 sample transponders have this property with data (e.g., `["DBS"]`)
 
 ### Satellite Settings (From 62 satellites)
 
@@ -180,7 +199,7 @@ public class ChannelFlags
 **What needs testing:**
 - ❓ **HD**: Multiple values (0, 1, 2, 3) - likely: 0=SD, 1=HD, 2=Full HD, 3=4K/UHD?
 
-### Subtitle Array Structure
+### Subtitle Array Structure ✅ VERIFIED
 
 Each subtitle track in `SubtArray` has these properties:
 
@@ -249,7 +268,8 @@ Each `fav_list_object_N` has these fields:
 public class FavListObject
 {
     public int uiMark { get; set; }           // Magic marker: 1414812756 (constant)
-    public int[] stProgNo { get; set; }       // Array of program indices (can be empty)
+    public object[] stProgNo { get; set; }    // ⚠️ UNVERIFIED: Array type unknown (all lists empty in sample)
+                                               // Likely int[] (program indices) or same structure as program.stProgNo
     public int sNoOfTVFavor { get; set; }     // Count of TV channels in this list
     public int sNoOfRadioFavor { get; set; }  // Count of radio channels in this list
     public int sTailOfFavor { get; set; }     // Tail pointer (typically 0)
@@ -257,6 +277,26 @@ public class FavListObject
     public int cHide { get; set; }            // Hide flag (0=visible, 1=hidden)
 }
 ```
+
+### Favorite List Names ✅ VERIFIED
+
+Both `box_object` and `fav_list_info_in_box_object` contain favorite list names:
+
+```csharp
+public string[] aucFavReName { get; set; }  // ✅ VERIFIED: Always 26 strings (one per favorite list)
+```
+
+**Example values:** `["الاخبار", "الافلام", "موسيقى", "الرياضة", "Child's", "Edu", "Social", "Adult", "FAV9", ...]`
+
+### Watching Program Current Selections ✅ VERIFIED
+
+The `watching_prog_object` tracks current selection per favorite list:
+
+```csharp
+public int[] usFavSelect { get; set; }  // ✅ VERIFIED: Always 26 integers (current position in each favorite list)
+```
+
+**Example:** `[0, 0, 0, ..., 0]` (26 values, typically all 0 if not using favorites)
 
 ### uiStatus - ENCODED STATUS FIELD
 
