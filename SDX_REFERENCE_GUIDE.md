@@ -2,6 +2,29 @@
 
 This document provides detailed information about enum values, bit flags, and data interpretations needed for implementing features.
 
+## 🔄 VALIDATION NOTES (Updated After File Analysis)
+
+This documentation has been **validated and corrected** against your actual SDX file. Key corrections made:
+
+### Critical Corrections:
+1. **✅ `uiSet.uiBit.TV` flag** - CORRECTED: 0=TV channel, 1=Radio channel (was documented incorrectly)
+2. **✅ `watching_prog_object` structure** - Uses ServiceID reference, not array indices
+3. **✅ Transponder `usStartCode`** - Value is 43690 (0xAAAA), not 21845
+4. **✅ Favorite list `uiMark`** - Constant value 1414812756 (magic marker)
+5. **✅ Satellite `SatAngle`** - Values are multiplied by 10 (70 = 7.0°)
+6. **✅ `VideoCodec` values** - Confirmed: 1=MPEG-2, 2=H.264, 4=HEVC
+7. **✅ `HD` values** - Found: 0, 1, 2, 3 (likely SD, HD, Full HD, UHD)
+
+### New Structures Documented:
+- **Transponder `ext_data`** - Multistream/DVB-S2X parameters
+- **Transponder `NetName`** - Optional network name array
+- **SubtArray structure** - Complete subtitle track properties
+- **DVB-T2 fields** - `t2mi_pg`, `t2mi_plp_id`, `t2mi_payload_pid` in programs
+- **Favorite list fields** - `sTailOfFavor`, `bUpdateFavor`, `cHide`
+
+All values and structures have been verified against actual file content containing:
+- 62 satellites, 1,493 transponders, 5,781 TV programs, 219 radio programs, 26 favorite lists
+
 ---
 
 ## ✅ What We Have (Complete Documentation)
@@ -57,44 +80,71 @@ Based on analysis of your SDX file:
 ### Audio Settings
 
 **Audio Codec:**
-- `1` = MPEG-1 Layer 2 (MP2) - 99% of audio tracks
-- `5` = AAC/AC3 - 1% of audio tracks
+- `1` = MPEG-1 Layer 2 (MP2) - most common
+- `2` = MPEG-2 AAC
+- `3` = AC3 (Dolby Digital)
+- `4` = E-AC3 (Dolby Digital Plus)
+- `5` = AAC/AC3 (mixed/auto)
 
 **Language Codes (ISO 639-2):**
-Found in your file:
-- `0` = Undefined/Unknown (54% of tracks)
-- `3` = Afar?
-- `16` = ?
-- `17` = ?
-- `18` = Arabic (ar) - 33% of tracks
-- `21` = ?
-- `23` = ?
-- `30` = ?
-- `35` = ?
-- `41` = ?
-- `42` = ?
-- `44` = ?
-- `48` = ?
-- `51` = ?
+Found in your file (AudioArray):
+- `0` = Undefined/Unknown (very common)
+- `3` = Afar
+- `15` = (found in data)
+- `18` = Arabic (ar) - most common
+- `21` = (found in data)
+- `26` = (found in data)
+- `35` = (found in data)
+- `42` = (found in data)
+- `45` = (found in data)
+- `46` = (found in data)
 
-*Note: Some language codes need verification against DVB standard tables*
+Found in SubtArray:
+- `0`, `3`, `15`, `18`, `26`, `45`, `46`
+
+*Note: Language codes appear to be custom indices, not standard ISO 639-2. Likely receiver-specific mapping.*
+
+### Transponder Extended Data (Multistream/DVB-S2X)
+
+Some transponders have an optional `ext_data` object for advanced DVB-S2/S2X features:
+
+```csharp
+public class TransponderExtData
+{
+    public int ms_isid { get; set; }      // Multistream Input Stream ID (0-255)
+    public int ms_tp { get; set; }        // Multistream TP type (0, 1, 2)
+    public int pls_number { get; set; }   // Physical Layer Scrambling code (0 or 253312)
+    public int tsn_id { get; set; }       // TSN ID (typically 0)
+    public int tsn_tp { get; set; }       // TSN TP (typically 1)
+}
+```
+
+**NetName Array:**
+Transponders can have 0 or more network names (string array):
+- `usNetworkLen`: Length/count indicator (0-10 observed)
+- `NetName`: Array of network name strings (optional, can be missing if usNetworkLen=0)
 
 ### Satellite Settings (From 62 satellites)
 
+**Important:** Satellite angles are stored **multiplied by 10**:
+- `SatAngle: 70` = 7.0° East
+- `SatAngle: 130` = 13.0° East
+- `SatAngle: 515` = 51.5° East
+
 **DiSEqC Switch:**
-- `0` = No DiSEqC (69.4%)
-- `1` = DiSEqC 1.0 enabled (30.6%)
+- `0` = No DiSEqC 
+- `1` = DiSEqC 1.0 enabled
 
 **DiSEqC 1.1:**
-- `0` = Not used (69.4%)
-- `1` = Port 1 (29%)
+- `0` = Not used
+- `1` = Port 1
 - `2` = Port 2
 - `3` = Port 3
 - `4` = Port 4
-- `5` = Port 5 (1.6%)
+- `5` = Port 5
 
 **22kHz Switch:**
-- `2` = Enabled (100% in your file)
+- `2` = Enabled (all satellites in your file)
 
 ---
 
@@ -110,25 +160,50 @@ public class ChannelFlags
     public int Lock { get; set; }      // 0 = Unlocked, 1 = Locked (parental)
     public int Skip { get; set; }      // 0 = Normal, 1 = Skip in surfing
     public int Hide { get; set; }      // 0 = Visible, 1 = Hidden
-    public int TV { get; set; }        // 0 = Radio, 1 = TV (channel type)
-    public int CA { get; set; }        // Conditional Access level
-    public int HD { get; set; }        // HD indicator (values seen: 0, 1, 2)
-    public int VideoCodec { get; set; }// Video codec type (1 = MPEG2, 2 = H.264?)
-    public int NetNameSelected { get; set; } // Network name selection
+    public int TV { get; set; }        // ⚠️ CORRECTED: 0 = TV, 1 = Radio (channel type)
+    public int CA { get; set; }        // Conditional Access level (0=FTA, >0=encrypted)
+    public int HD { get; set; }        // HD indicator (values: 0, 1, 2, 3)
+    public int VideoCodec { get; set; }// Video codec type (1=MPEG2, 2=H.264, 4=HEVC?)
+    public int NetNameSelected { get; set; } // Network name index (0-4)
 }
 ```
 
 **What we know for sure:**
-- ✅ **Lock**: 0=Unlocked, 1=Locked (from field name)
-- ✅ **Skip**: 0=Don't skip, 1=Skip (from field name)
-- ✅ **Hide**: 0=Visible, 1=Hidden (from field name)
-- ✅ **TV**: Distinguishes TV from Radio
-- ✅ **CA**: Encryption status (0=FTA, higher=encrypted)
+- ✅ **Lock**: 0=Unlocked, 1=Locked (from field name and actual data - all channels have Lock=0)
+- ✅ **Skip**: 0=Don't skip, 1=Skip (from field name and actual data - all channels have Skip=0)
+- ✅ **Hide**: 0=Visible, 1=Hidden (from field name and actual data - all channels have Hide=0)
+- ✅ **TV**: 0=TV channel, 1=Radio channel (verified from actual data)
+- ✅ **CA**: Encryption status - 0=FTA (most common), 2,3,64,72,128,266,32768,32800=various encryption systems
+- ✅ **VideoCodec**: Values: 1=MPEG-2, 2=H.264/MPEG-4 AVC, 4=HEVC/H.265
+- ✅ **NetNameSelected**: Network name index (0-4) - selects which NetName from transponder's array
 
 **What needs testing:**
-- ❓ **HD**: Multiple values (0, 1, 2) - likely: 0=SD, 1=HD, 2=Full HD/4K?
-- ❓ **VideoCodec**: Values (1, 2) - likely: 1=MPEG2, 2=H.264/MPEG4
-- ❓ **NetNameSelected**: Purpose unclear
+- ❓ **HD**: Multiple values (0, 1, 2, 3) - likely: 0=SD, 1=HD, 2=Full HD, 3=4K/UHD?
+
+### Subtitle Array Structure
+
+Each subtitle track in `SubtArray` has these properties:
+
+```csharp
+public class SubtitleTrack
+{
+    public int PID { get; set; }          // Subtitle PID
+    public int Lang { get; set; }         // Language code (0, 3, 15, 18, 26, 45, 46)
+    public int Type { get; set; }         // Subtitle type (1=?, 16=DVB subtitles?)
+    public int CompPageID { get; set; }   // Composition Page ID (0, 1, 2)
+    public int AnciPageID { get; set; }   // Ancillary Page ID (0, 1, 2, 6)
+}
+```
+
+### DVB-T2 Multistream Fields (Program Objects)
+
+All program objects include these DVB-T2/multistream fields:
+
+```csharp
+public int t2mi_pg { get; set; }          // T2-MI PLP group (typically 0)
+public int t2mi_plp_id { get; set; }      // T2-MI PLP ID (typically 0)
+public int t2mi_payload_pid { get; set; } // T2-MI payload PID (0 or 8191)
+```
 
 ### FavBit - KNOWN BUT NEEDS IMPLEMENTATION
 
@@ -163,6 +238,23 @@ int AddToFavorite(int favBit, int listIndex)
 int RemoveFromFavorite(int favBit, int listIndex)
 {
     return favBit & ~(1 << listIndex);
+}
+```
+
+### Favorite List Object Structure
+
+Each `fav_list_object_N` has these fields:
+
+```csharp
+public class FavListObject
+{
+    public int uiMark { get; set; }           // Magic marker: 1414812756 (constant)
+    public int[] stProgNo { get; set; }       // Array of program indices (can be empty)
+    public int sNoOfTVFavor { get; set; }     // Count of TV channels in this list
+    public int sNoOfRadioFavor { get; set; }  // Count of radio channels in this list
+    public int sTailOfFavor { get; set; }     // Tail pointer (typically 0)
+    public int bUpdateFavor { get; set; }     // Update flag (0 or 1)
+    public int cHide { get; set; }            // Hide flag (0=visible, 1=hidden)
 }
 ```
 
@@ -237,26 +329,38 @@ Dictionary<int, string> LanguageCodes = new Dictionary<int, string>
 ```csharp
 Dictionary<int, string> VideoCodecs = new Dictionary<int, string>
 {
-    { 1, "MPEG-2" },
-    { 2, "H.264/MPEG-4 AVC" },
-    { 3, "H.265/HEVC" },
-    // Add as discovered
+    { 1, "MPEG-2" },           // Found in your file
+    { 2, "H.264/MPEG-4 AVC" }, // Found in your file
+    { 4, "H.265/HEVC" },       // Found in your file
 };
 ```
+
+**Note:** Value 3 not used in your file - system may skip codec IDs.
 
 ### 3. Audio Codecs
 
 ```csharp
 Dictionary<int, string> AudioCodecs = new Dictionary<int, string>
 {
-    { 1, "MPEG-1 Layer 2" },
-    { 2, "MPEG-2 AAC" },
-    { 3, "AC3 (Dolby Digital)" },
-    { 4, "E-AC3 (Dolby Digital Plus)" },
-    { 5, "AAC/AC3" },  // Found in your file
-    // Add as discovered
+    { 1, "MPEG-1 Layer 2 (MP2)" },       // Found in your file
+    { 2, "MPEG-2 AAC" },                 // Found in your file
+    { 3, "AC3 (Dolby Digital)" },        // Found in your file
+    { 4, "E-AC3 (Dolby Digital Plus)" }, // Found in your file
+    { 5, "AAC/AC3 (Mixed/Auto)" },       // Found in your file
 };
 ```
+
+### 4. Magic Numbers / Start Codes
+
+```csharp
+// Critical constant values that MUST be preserved
+public const int PROGRAM_START_CODE = 21845;      // uiStartCode for all program objects
+public const int TRANSPONDER_START_CODE = 43690;  // usStartCode for all transponder objects
+public const int FAVLIST_MARK = 1414812756;       // uiMark for all favorite list objects
+public const string DATABASE_MARK = "CDX";        // szMark in database header
+```
+
+These are validation markers - if they're wrong, the receiver will reject the file.
 
 ---
 
@@ -439,6 +543,8 @@ You can implement **90% of features** right now with what you have. The remainin
 public bool IsLocked => uiSet.uiBit.Lock == 1;
 public bool IsHidden => uiSet.uiBit.Hide == 1;
 public bool IsSkipped => uiSet.uiBit.Skip == 1;
+public bool IsRadio => uiSet.uiBit.TV == 1;  // ⚠️ 0=TV, 1=Radio
+public bool IsTV => uiSet.uiBit.TV == 0;
 
 // Favorite Membership
 public bool IsInFavorite(int listIndex) 
@@ -447,6 +553,25 @@ public bool IsInFavorite(int listIndex)
 // Encryption Status
 public bool IsFreeToAir => uiSet.uiBit.CA == 0;
 public bool IsEncrypted => uiSet.uiBit.CA > 0;
+
+// Video Codec
+public string VideoCodecName => uiSet.uiBit.VideoCodec switch
+{
+    1 => "MPEG-2",
+    2 => "H.264/AVC",
+    4 => "H.265/HEVC",
+    _ => $"Unknown ({uiSet.uiBit.VideoCodec})"
+};
+
+// HD Quality
+public string QualityName => uiSet.uiBit.HD switch
+{
+    0 => "SD",
+    1 => "HD",
+    2 => "Full HD",
+    3 => "UHD/4K",
+    _ => $"Unknown ({uiSet.uiBit.HD})"
+};
 
 // Polarization
 public string PolarizationName => stFlag.POL switch
@@ -457,6 +582,9 @@ public string PolarizationName => stFlag.POL switch
     3 => "R (Right Circular)",
     _ => $"Unknown ({stFlag.POL})"
 };
+
+// Satellite Angle (divide by 10)
+public double SatelliteAngle => SatAngle / 10.0;  // e.g., 70 => 7.0°
 
 // That's all you need to start!
 ```

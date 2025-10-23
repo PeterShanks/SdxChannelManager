@@ -3,6 +3,25 @@
 ## Purpose
 This guide provides critical information for building models, parsing, manipulating, and writing SDX files. Use this alongside `README_SDX_STRUCTURE.md` for complete implementation.
 
+## 🔄 VALIDATION UPDATE
+
+This guide has been **validated and corrected** based on actual SDX file analysis. Key corrections:
+
+### Structure Corrections:
+1. **watching_prog_object** - Uses ServiceID-based reference, not array indices
+2. **Transponder usStartCode** - Confirmed as 43690 (not 21845)
+3. **Favorite list uiMark** - Magic constant 1414812756 required
+4. **Program objects** - Include DVB-T2 fields and complete subtitle structure
+
+### New Requirements Documented:
+- Transponder `ext_data` object (optional, for multistream)
+- Transponder `NetName` array (optional)
+- Complete `SubtArray` structure with 5 properties
+- DVB-T2 multistream fields in all program objects
+- Additional favorite list fields
+
+**All code examples have been updated to reflect actual file structure.**
+
 ---
 
 ## ⚠️ Critical Information for Read/Write Operations
@@ -96,14 +115,20 @@ When reordering or deleting channels, update these references:
 ```json
 {
   "watching_prog_object": {
-    "ssCurrentProgIndex": 925,     // ⚠️ Current TV channel index
-    "ssCurrentRadioIndex": 19964,  // ⚠️ Current radio channel index
-    "sCurTransponderIndex": 52,    // ⚠️ Current transponder index
-    "sCurSatIndex": 0              // ⚠️ Current satellite index
+    "stProgNo": {
+      "uiWord32": 3672234,         // ⚠️ Encoded program number (32-bit)
+      "unShort": {
+        "sLo16": 2218,             // ⚠️ Low 16 bits (ServiceID low)
+        "sHi16": 56                // ⚠️ High 16 bits (ServiceID high)
+      }
+    },
+    "usTransportStreamID": 0,      // Transport Stream ID
+    "usOriginalNetworkID": 0,      // Original Network ID
+    "usFavSelect": [0, 0, ...]     // ⚠️ Array of 26 integers (current fav selection per list)
   }
 }
 ```
-**Action:** Update indices if current channel is affected by reordering
+**Action:** Update stProgNo when the current channel is reordered (match with program's ServiceID)
 
 #### D. Satellite → Last Played Channel References
 ```json
@@ -223,10 +248,17 @@ Every `program_tv_object` and `program_radio_object` MUST have:
 - `uiStartCode`: 21845 (magic number - always this value)
 - `ServiceName`: String (channel name)
 - `VideoPID`, `PCRPID`, `PMTPID`: Valid PID values
+- `TTXPID`: Teletext PID (typically 8191 if not present)
+- `stProgNo`: Object with ServiceID and unShort structure
 - `uiSet.uiBit`: Object with channel flags
 - `uiSet.uiStatus`: Encoded status value
 - `AudioArray`: Array (can be empty but must exist)
 - `SubtArray`: Array (can be empty but must exist)
+- `FavBit`: Integer (favorite list membership bitfield)
+- `TSID`, `ONID`, `SDTServiceType`: DVB metadata fields
+- `t2mi_pg`, `t2mi_plp_id`, `t2mi_payload_pid`: DVB-T2 multistream fields
+- `AudioSelected`, `SubtSelected`: Currently selected track indices
+- `ucNameLen`, `ucAudioPID`, `ucSubPID`: Counts of name length and tracks
 
 ### 7. Channel Reordering Implementation Guide
 
@@ -287,17 +319,15 @@ foreach (var favList in favListObjects)
 }
 ```
 
-#### Step 4: Update Current Channel Index
+#### Step 4: Update Current Channel Reference
 ```csharp
-// Update watching_prog_object if affected
-if (watchingProgObject["ssCurrentProgIndex"] == oldIndex)
-{
-    watchingProgObject["ssCurrentProgIndex"] = newIndex;
-}
-else if (/* index affected by shift */)
-{
-    // Adjust accordingly
-}
+// Update watching_prog_object if the current channel's ServiceID matches
+// Note: watching_prog_object uses ServiceID, not array index
+// Only update if you're changing the channel's ServiceID itself
+// Typically, reordering doesn't require updating watching_prog_object
+// since it references by ServiceID, not by position
+var currentServiceID = GetServiceIDFromProgNo(watchingProgObject["stProgNo"]);
+// Compare with moved channel's ServiceID - update only if ServiceID changes
 ```
 
 #### Step 5: Update Satellite Last-Played Indices

@@ -2,6 +2,12 @@
 
 This document provides a comprehensive overview of all JSON structures in the SDX file.
 
+> **📝 VALIDATION NOTE:** This is an auto-generated structure dump showing actual file contents.
+> The structure data itself is **accurate**, but some descriptive text has been corrected:
+> - `watching_prog_object` uses ServiceID references (not array indices)
+> - Radio channels have `TV: 1`, TV channels have `TV: 0`
+> - See **SDX_REFERENCE_GUIDE.md** for flag interpretations and corrected explanations
+
 ## About the SDX File Format
 
 ### File Structure Overview
@@ -113,9 +119,9 @@ The SDX file organizes data in a **specific logical sequence** that reflects the
 - **Purpose:** Stores the currently tuned channel and viewing state
 - **Position:** End of file
 - **Contains:**
-  - Current channel index
-  - Current satellite and transponder indices
-  - Active favorite list selection
+  - Current channel ServiceID (stProgNo with uiWord32 and unShort)
+  - Transport Stream ID and Original Network ID
+  - Active favorite list selection array (26 integers)
 
 ### Data Relationships and Hierarchy
 
@@ -126,14 +132,14 @@ Satellite Object (index: N)
     └── Transponder Objects (SatIndex = N)
         └── Program Objects (reference transponder via freq/SR/ONID/TSID)
             └── Favorite Lists (reference programs by index)
-                └── Watching Program (references current channel index)
+                └── Watching Program (references current channel by ServiceID)
 ```
 
 **Key Relationships:**
 - **Transponder → Satellite:** `transponder_object.stFlag.SatIndex` references `satellite_object_N`
 - **Program → Transponder:** Programs are associated with transponders via frequency, symbol rate, and service IDs
 - **Favorite → Programs:** `fav_list_object` contains arrays of program indices
-- **Watching → Program:** `watching_prog_object` contains the index of the currently tuned channel
+- **Watching → Program:** `watching_prog_object` references the currently tuned channel by ServiceID (not by array index)
 
 ### Parsing Strategy
 
