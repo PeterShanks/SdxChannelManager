@@ -23,6 +23,9 @@ namespace SdxChannelManager.ViewModels
         private string _fileSize;
         private bool _showWelcome;
         private bool _showChannels;
+        private string _searchText;
+        private string _targetIndexText;
+        private List<SdxChannel> _allCurrentTypeChannels; // Store all channels of current type (TV or Radio) for filtering
 
         public MainViewModel()
         {
@@ -33,6 +36,9 @@ namespace SdxChannelManager.ViewModels
             _fileSize = "";
             _showWelcome = true;
             _showChannels = false;
+            _searchText = string.Empty;
+            _targetIndexText = string.Empty;
+            _allCurrentTypeChannels = new List<SdxChannel>();
 
             // Initialize commands
             OpenFileCommand = new RelayCommand(_ => OpenFile());
@@ -40,6 +46,7 @@ namespace SdxChannelManager.ViewModels
             SaveAsFileCommand = new RelayCommand(_ => SaveAsFile(), _ => _database != null);
             MoveUpCommand = new RelayCommand(_ => MoveUp(), _ => CanMoveUp());
             MoveDownCommand = new RelayCommand(_ => MoveDown(), _ => CanMoveDown());
+            MoveToIndexCommand = new RelayCommand(_ => MoveToIndex(), _ => CanMoveToIndex());
             ShowTvCommand = new RelayCommand(_ => LoadTvChannels());
             ShowRadioCommand = new RelayCommand(_ => LoadRadioChannels());
 
@@ -205,11 +212,40 @@ namespace SdxChannelManager.ViewModels
             }
         }
 
+        public string SearchText
+        {
+            get => _searchText;
+            set
+            {
+                if (_searchText != value)
+                {
+                    _searchText = value;
+                    OnPropertyChanged();
+                    ApplyFilter(); // Live search - filter as user types
+                }
+            }
+        }
+
+        public string TargetIndexText
+        {
+            get => _targetIndexText;
+            set
+            {
+                if (_targetIndexText != value)
+                {
+                    _targetIndexText = value;
+                    OnPropertyChanged();
+                    CommandManager.InvalidateRequerySuggested(); // Update button enabled state
+                }
+            }
+        }
+
         public ICommand OpenFileCommand { get; }
         public ICommand SaveFileCommand { get; }
         public ICommand SaveAsFileCommand { get; }
         public ICommand MoveUpCommand { get; }
         public ICommand MoveDownCommand { get; }
+        public ICommand MoveToIndexCommand { get; }
         public ICommand ShowTvCommand { get; }
         public ICommand ShowRadioCommand { get; }
 
@@ -328,12 +364,11 @@ namespace SdxChannelManager.ViewModels
             ShowTvChannels = true;
             ShowRadioChannels = false;
             
-            Channels.Clear();
-            var tvChannels = _database.Channels.Where(c => !c.IsRadio);
-            foreach (var channel in tvChannels)
-            {
-                Channels.Add(channel);
-            }
+            // Store all TV channels for filtering
+            _allCurrentTypeChannels = _database.Channels.Where(c => !c.IsRadio).ToList();
+            
+            // Apply filter (will show all if search is empty)
+            ApplyFilter();
             
             StatusMessage = $"Showing {Channels.Count} TV channels";
         }
@@ -351,14 +386,32 @@ namespace SdxChannelManager.ViewModels
             ShowTvChannels = false;
             ShowRadioChannels = true;
             
+            // Store all radio channels for filtering
+            _allCurrentTypeChannels = _database.Channels.Where(c => c.IsRadio).ToList();
+            
+            // Apply filter (will show all if search is empty)
+            ApplyFilter();
+            
+            StatusMessage = $"Showing {Channels.Count} radio channels";
+        }
+
+        private void ApplyFilter()
+        {
             Channels.Clear();
-            var radioChannels = _database.Channels.Where(c => c.IsRadio);
-            foreach (var channel in radioChannels)
+            
+            var filtered = _allCurrentTypeChannels.AsEnumerable();
+            
+            // Apply search filter if search text is not empty
+            if (!string.IsNullOrWhiteSpace(SearchText))
+            {
+                filtered = filtered.Where(c => 
+                    c.ServiceName.Contains(SearchText, StringComparison.OrdinalIgnoreCase));
+            }
+            
+            foreach (var channel in filtered)
             {
                 Channels.Add(channel);
             }
-            
-            StatusMessage = $"Showing {Channels.Count} radio channels";
         }
 
         private bool CanMoveUp()
@@ -420,6 +473,64 @@ namespace SdxChannelManager.ViewModels
             // Don't change the index - the index is the position in the display list
             // The actual reindexing for the file will happen during save
             // This method is now a no-op but kept for future use
+        }
+
+        private bool CanMoveToIndex()
+        {
+            if (SelectedChannel == null || _database == null || string.IsNullOrWhiteSpace(TargetIndexText))
+                return false;
+            
+            if (!int.TryParse(TargetIndexText, out int targetIndex))
+                return false;
+            
+            // Validate that target index is within range
+            // Use the filtered Channels collection count
+            return targetIndex >= 0 && targetIndex < Channels.Count;
+        }
+
+        private void MoveToIndex()
+        {
+            if (_database == null || SelectedChannel == null) return;
+            
+            if (!int.TryParse(TargetIndexText, out int targetIndex))
+            {
+                MessageBox.Show("Please enter a valid number for the index.", "Invalid Input", 
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+            
+            try
+            {
+                // Call the model method to perform the move
+                _database.MoveChannelToIndex(SelectedChannel, targetIndex, ShowTvChannels);
+                
+                // Refresh the display
+                if (ShowTvChannels)
+                {
+                    LoadTvChannels();
+                }
+                else
+                {
+                    LoadRadioChannels();
+                }
+                
+                // Re-select the moved channel
+                SelectedChannel = Channels.FirstOrDefault(c => c == SelectedChannel);
+                
+                StatusMessage = $"✅ Moved '{SelectedChannel?.ServiceName}' to index {targetIndex}";
+                TargetIndexText = string.Empty; // Clear the textbox
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                MessageBox.Show($"Index must be between 0 and {Channels.Count - 1}.", "Out of Range", 
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error moving channel: {ex.Message}", "Error", 
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+                StatusMessage = "❌ Error moving channel";
+            }
         }
 
         private void UpdateDatabaseChannels()

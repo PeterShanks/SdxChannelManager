@@ -248,17 +248,51 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
                         
-                        <TextBlock Grid.Column="0" Text="Channels" 
+                        <TextBlock Grid.Column="0" Grid.Row="0" Text="Channels" 
                                    FontSize="18" FontWeight="Bold" 
                                    Foreground="#333"
                                    VerticalAlignment="Center"/>
                         
-                        <StackPanel Grid.Column="1" Orientation="Horizontal">
+                        <StackPanel Grid.Column="1" Grid.Row="0" Orientation="Horizontal">
                             <TextBlock Text="{Binding Channels.Count, StringFormat='{}{0} items'}" 
                                        FontSize="12" Foreground="#757575"
                                        VerticalAlignment="Center" Margin="0,0,10,0"/>
                         </StackPanel>
+                        
+                        <!-- Search TextBox -->
+                        <TextBox Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2"
+                                 Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                                 Margin="0,10,0,0"
+                                 FontSize="13"
+                                 Padding="8,6"
+                                 BorderBrush="#E0E0E0"
+                                 BorderThickness="1">
+                            <TextBox.Style>
+                                <Style TargetType="TextBox">
+                                    <Style.Triggers>
+                                        <Trigger Property="Text" Value="">
+                                            <Setter Property="Background">
+                                                <Setter.Value>
+                                                    <VisualBrush Stretch="None">
+                                                        <VisualBrush.Visual>
+                                                            <TextBlock Text="🔍 Search channels..." 
+                                                                       Foreground="#AAAAAA" 
+                                                                       FontSize="13"
+                                                                       Margin="5,0,0,0"/>
+                                                        </VisualBrush.Visual>
+                                                    </VisualBrush>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBox.Style>
+                        </TextBox>
                     </Grid>
 
                     <!-- Welcome Screen -->
@@ -298,8 +332,13 @@
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
+                                    
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
 
-                                    <TextBlock Grid.Column="0" 
+                                    <TextBlock Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"
                                                Text="{Binding Index}"
                                                FontSize="11"
                                                FontWeight="Bold"
@@ -308,19 +347,27 @@
                                                HorizontalAlignment="Right"
                                                Margin="0,0,10,0"/>
 
-                                    <TextBlock Grid.Column="1" 
+                                    <TextBlock Grid.Column="1" Grid.Row="0" Grid.RowSpan="2"
                                                Text="{Binding Type, Converter={StaticResource TypeToEmojiConverter}}"
                                                FontSize="16"
                                                VerticalAlignment="Center"
                                                HorizontalAlignment="Center"/>
 
-                                    <TextBlock Grid.Column="2" 
+                                    <TextBlock Grid.Column="2" Grid.Row="0"
                                                Text="{Binding ServiceName}"
                                                FontSize="14"
                                                VerticalAlignment="Center"
                                                TextTrimming="CharacterEllipsis"/>
+                                    
+                                    <TextBlock Grid.Column="2" Grid.Row="1"
+                                               Text="{Binding SatelliteName}"
+                                               FontSize="10"
+                                               Foreground="#999"
+                                               VerticalAlignment="Center"
+                                               TextTrimming="CharacterEllipsis"
+                                               Margin="0,2,0,0"/>
 
-                                    <StackPanel Grid.Column="3" Orientation="Horizontal" Margin="10,0,0,0">
+                                    <StackPanel Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" Orientation="Horizontal" Margin="10,0,0,0" VerticalAlignment="Center">
                                         <Border Background="#E3F2FD" CornerRadius="3" Padding="5,2" Margin="2,0">
                                             <TextBlock Text="{Binding Type}"
                                                        FontSize="10"
@@ -360,6 +407,49 @@
                             HorizontalAlignment="Stretch"
                             Margin="0,5"
                             ToolTip="Move selected channel down in the list"/>
+                    
+                    <Separator Margin="0,15"/>
+                    
+                    <TextBlock Text="Move to Index" 
+                               FontSize="14" FontWeight="Bold" 
+                               Margin="0,5,0,10"
+                               Foreground="#555"/>
+                    
+                    <TextBox Text="{Binding TargetIndexText, UpdateSourceTrigger=PropertyChanged}"
+                             FontSize="13"
+                             Padding="8,6"
+                             Margin="0,5"
+                             BorderBrush="#E0E0E0"
+                             BorderThickness="1">
+                        <TextBox.Style>
+                            <Style TargetType="TextBox">
+                                <Style.Triggers>
+                                    <Trigger Property="Text" Value="">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <VisualBrush Stretch="None">
+                                                    <VisualBrush.Visual>
+                                                        <TextBlock Text="Enter index (e.g., 0, 10, 100)..." 
+                                                                   Foreground="#AAAAAA" 
+                                                                   FontSize="11"
+                                                                   Margin="5,0,0,0"/>
+                                                    </VisualBrush.Visual>
+                                                </VisualBrush>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBox.Style>
+                    </TextBox>
+                    
+                    <Button Content="📍 Move to Index" 
+                            Command="{Binding MoveToIndexCommand}"
+                            Style="{StaticResource ModernButtonStyle}"
+                            Background="#9C27B0"
+                            HorizontalAlignment="Stretch"
+                            Margin="0,5"
+                            ToolTip="Move selected channel to the specified index"/>
 
                     <Separator Margin="0,20"/>
 

@@ -13,7 +13,8 @@ namespace SdxChannelManager.Models
         // Typed channel data - use this for proper access to all properties
         public ProgramChannelData ChannelData { get; set; }
         
-        // Display properties
+        public string SatelliteName { get; set; } = string.Empty;
+        
         public string Type => IsRadio ? "Radio" : "TV";
         
         // Constructor
