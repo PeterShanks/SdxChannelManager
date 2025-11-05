@@ -21,7 +21,7 @@ namespace SdxChannelManager.Models
         public DatabaseHeaderObject? DatabaseHeaderObject { get; set; }
         public GlobalVariableObject? GlobalVariableObject { get; set; }
         
-        public SdxDatabase()
+        private SdxDatabase()
         {
             Channels = new ObservableCollection<SdxChannel>();
             SatelliteObjects = new List<SatelliteObject>();
@@ -55,8 +55,6 @@ namespace SdxChannelManager.Models
                 database.Channels.Clear();
                 foreach (var channel in sortedChannels)
                 {
-                    // Populate satellite name for display
-                    channel.SatelliteName = database.GetSatelliteNameForChannel(channel);
                     database.Channels.Add(channel);
                 }
             }
@@ -68,35 +66,6 @@ namespace SdxChannelManager.Models
             return database;
         }
         
-        /// <summary>
-        /// Gets the satellite name for a given channel by finding its transponder
-        /// </summary>
-        public string GetSatelliteNameForChannel(SdxChannel channel)
-        {
-            if (channel?.ChannelData == null) return string.Empty;
-            
-            // Try to find the transponder that matches this channel's TSID and ONID
-            // Note: According to SDX docs, channels reference transponders via TSID/ONID
-            var transponder = TransponderObjects.FirstOrDefault(t => 
-            {
-                // We need to match somehow - the exact matching criteria may vary
-                // For now, we'll use the satellite index from the transponder if available
-                return t?.StFlag != null;
-            });
-            
-            // If we can't find a specific match, try to infer from the channel's position
-            // or use a default approach - get the first transponder's satellite
-            if (transponder != null && transponder.StFlag != null)
-            {
-                int satIndex = transponder.StFlag.SatIndex;
-                if (satIndex >= 0 && satIndex < SatelliteObjects.Count)
-                {
-                    return SatelliteObjects[satIndex].SatName ?? string.Empty;
-                }
-            }
-            
-            return string.Empty; // Leave empty if not found
-        }
         
         /// <summary>
         /// Moves a channel to a specific index position and updates all necessary references
